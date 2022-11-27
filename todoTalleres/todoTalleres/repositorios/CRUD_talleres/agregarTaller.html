@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<form action="agregarTaller" class="container mt-3" method="POST"> {% csrf_token %}
+    <table>
+        <tr>
+            <th>Rut Taller</th>
+        </tr>
+        <tr>
+            <th><input type="text" name="rutTaller"></th>
+        </tr>
+        <tr>
+            <th>Razon social</th>
+        </tr>
+        <tr>
+            <th><input type="text" name="razonSocial"></th>
+        </tr>
+        <tr>
+            <th>Comuna</th>
+        </tr>
+        <tr>
+            <th><input type="date" name="comuna"></th>
+        </tr>
+        <tr>
+            <th>Dirección</th>
+        </tr>
+        <tr>
+            <th><input type="text" name="direccion"></th>
+        </tr>
+        <tr>
+            <th>Telefono</th>
+        </tr>
+        <tr>
+            <th><input type="text" name="telefono"></th>
+        </tr>
+        <tr>
+            <th>correo</th>
+        </tr>
+        <tr>
+            <th><input type="text" name="correo"></th>
+        </tr>
+        <tr>
+            <th>Pagina</th>
+        </tr>
+        <tr>
+            <th><input type="text" name="pagina"></th>
+        </tr>
+        <tr>
+            <th>Rut representante</th>
+        </tr>
+        <tr>
+            <th><input type="text" name="rutRepresentante"></th>
+        </tr>
+    </table>
+    <div class="mt-3">
+        <input type="submit">
+    </div>
+</form>
+
+{% endblock %}

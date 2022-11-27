@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<form action="agregarClientes" class="container mt-3" method="POST"> {% csrf_token %}
+    <table>
+        <tr>
+            <th>Rut cliente</th>
+        </tr>
+        <tr>
+            <th><input type="text" name="rutCliente"></th>
+        </tr>
+        <tr>
+            <th>Correo</th>
+        </tr>
+        <tr>
+            <th><input type="text" name="correo"></th>
+        </tr>
+        <tr>
+            <th>Fecha nacimiento</th>
+        </tr>
+        <tr>
+            <th><input type="date" name="fechaNacimiento"></th>
+        </tr>
+        <tr>
+            <th>Nick</th>
+        </tr>
+        <tr>
+            <th><input type="text" name="nick"></th>
+        </tr>
+        <tr>
+            <th>Clave</th>
+        </tr>
+        <tr>
+            <th><input type="text" name="clave"></th>
+        </tr>
+        <tr>
+            <th>Tipo vehiculo</th>
+        </tr>
+        <tr>
+            <th><input type="text" name="tipoVehiculo"></th>
+        </tr>
+        <tr>
+            <th>Patente</th>
+        </tr>
+        <tr>
+            <th><input type="text" name="patente"></th>
+        </tr>
+        <tr>
+            <th>Modelo</th>
+        </tr>
+        <tr>
+            <th><input type="text" name="modelo"></th>
+        </tr>
+        <tr>
+            <th>Marca</th>
+        </tr>
+        <tr>
+            <th><input type="text" name="marca"></th>
+        </tr>
+        <tr>
+            <th>
+                <label for="formFileLg" class="form-label">Imagen</label>
+                <input class="form-control form-control-lg" id="formFileLg" type="file" name="anno">
+            </th>
+        </tr>
+    </table>
+    <div class="mt-3">
+        <input type="submit">
+    </div>
+</form>
+
+{% endblock %}
