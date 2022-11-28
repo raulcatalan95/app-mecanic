@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<form action="registro_representante" class="container mt-3" method="POST"> {% csrf_token %}
+    <table>
+        <tr>
+            <th>Rut Representante</th>
+        </tr>
+        <tr>
+            <th><input type="text" name="rutRepresentante"></th>
+        </tr>
+        <tr>
+            <th>Nombre</th>
+        </tr>
+        <tr>
+            <th><input type="text" name="nombre"></th>
+        </tr>
+        <tr>
+            <th>Correo</th>
+        </tr>
+        <tr>
+            <th><input type="date" name="correo"></th>
+        </tr>
+        <tr>
+            <th>Clave</th>
+        </tr>
+        <tr>
+            <th><input type="text" name="clave"></th>
+        </tr>
+        <tr>
+            <th>Telefono</th>
+        </tr>
+        <tr>
+            <th><input type="text" name="telefono"></th>
+        </tr>
+        <tr>
+            <th>Fecha nacimiento</th>
+        </tr>
+        <tr>
+            <th><input type="date" name="fechaNacimiento"></th>
+        </tr>
+    </table>
+    <div class="mt-3">
+        <input type="submit">
+    </div>
+</form>
+<h3>{{mensaje}}</h3>
+
+{% endblock %}
