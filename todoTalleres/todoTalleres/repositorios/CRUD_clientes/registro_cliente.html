@@ -2,7 +2,7 @@
 
 {% block body %}
 
-<form action="agregarClientes" class="container mt-3" method="POST"> {% csrf_token %}
+<form action="registro_cliente" class="container mt-3" method="POST"> {% csrf_token %}
     <table>
         <tr>
             <th>Rut cliente</th>
@@ -69,5 +69,6 @@
         <input type="submit">
     </div>
 </form>
+<h3>{{mensaje}}</h3>
 
 {% endblock %}

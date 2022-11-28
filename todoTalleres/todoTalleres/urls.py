@@ -20,8 +20,9 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.renderBase),
-    path('agregarClientes',views.agregarClientes),
-    path('agregarTaller',views.agregarTaller),
-    
-    
+    path('registro_cliente',views.registro_cliente),
+    path('registro_taller',views.registro_taller),
+    path('registro_representante',views.registro_representante),
+    path('buscar_talleres',views.buscar_talleres)
+
 ]

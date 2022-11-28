@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block body %}
+<h2>Buscar Insumo</h2>
+<form action="buscar_talleres" method="GET"> {% csrf_token %}
+        <input type="text" name="buscar">
+        <input type="submit">
+</form>
+
+    <table style="visibility:{{visibilidad}};">
+        {% for taller in talleres %}
+        {{taller}}
+        <tr>
+            <td><label class="form-label">Rut Taller</label></td>
+            <td >{{taller.rutTaller}}</td>
+      
+        </tr>
+        <tr>
+            <td><label class="form-label">Razon social</label></td>
+            <td>{{taller.razonSocial}}</td>
+         
+        </tr>
+        <tr>
+            <td><label class="form-label">Comuna</label></td>
+            <td value="">{{taller.comuna}}</td>
+      
+        </tr>
+        <tr>
+            <td><label class="form-label">Direccion</label></td>
+            <td value="">{{taller.direccion}}</td>
+         
+        </tr>
+        <tr>
+            <td><label class="form-label">Telefono</label></td>
+            <td value="">{{taller.telefono}}</td>
+      
+        </tr>
+        <tr>
+            <td><label class="form-label">Correo</label></td>
+            <td value="">{{taller.correo}}</td>
+         
+        </tr>
+        <tr>
+            <td><label class="form-label">Pagina</label></td>
+            <td value="">{{taller.pagina}}</td>
+      
+        </tr>
+        <tr>
+            <td><label class="form-label">Nombre Representante</label></td>
+            <td value="">{{taller.rutRepresentante.nombre}}</td>
+         
+        </tr>
+           {% endfor %}
+
+    </table>
+
+    {{mensaje}}
+{% endblock %}
