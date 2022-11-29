@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block body %}
+
+<h1>Iniciar Sesión</h1>
+
+<form action="fx_iniciarSesion" method="post"> {% csrf_token %}
+    <div class="mb-3 col-6">
+        <label class="form-label">Usuario</label>
+        <input type="text" class="form-control" name="form_username" />
+    </div>
+    <div class="mb-3 col-6">
+        <label class="form-label">Contraseña</label>
+        <input type="password" class="form-control" name="form_password" />
+    </div>
+    <div class="mb-3 col-6">
+        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+            <input type="submit" class="btn btn-primary" value="Iniciar sesion" />
+            <input type="reset" class="btn btn-danger" value="Cancelar" />
+        </div>
+    </div>
+    <div class="mb-3 col-6">
+        <div class="form-text">
+            {{mensaje}}
+        </div>
+    </div>
+</form>
+{% endblock %}
