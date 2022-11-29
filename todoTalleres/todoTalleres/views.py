@@ -1,9 +1,45 @@
 from django.shortcuts import render, redirect
 from . import models
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+
 
 def renderBase(request):
     return render(request,'base.html')
+    
+#inicio de sesion
+def irInicioSesion(request):
+    try:
+        if request.session['sesion_activa'] == 0 or request.session['sesion_activa'] == 1:
+            del request.session['sesion_activa']
+            return render(request,"base.html")
+        else:
+            return render(request,"sesion/login.html")
+    except:
+        return render(request,"sesion/login.html")
+        
+def fxInicioSesion(request):
+    usr = None
+    try:
+        usr = models.Clientes.objects.get(nick = request.POST["form_username"])
+        if usr:
+            if (usr.clave == request.POST["form_password"]):
+                request.session['sesion_activa'] = 0
+                return render(request,"vista_clientes.html")
+            else:
+                return render(request,"sesion/login.html"), {"mensaje":"contraseña no válida"}
+        else:
+            usr = models.Talleres.objects.get(correo = request.POST["form_username"])
+            if (usr.clave == request.POST["form_password"]):
+                request.session['sesion_activa'] = 1
+                sesion = request.session['sesion_activa']
+                return render(request,"vista_talleres.html",{"sesion":sesion})
+            else:
+                return render(request,"sesion/login.html"), {"mensaje":"contraseña no válida"}
+    except Exception as ex:
+        return render(request,"sesion/login.html",{"mensaje":ex})
+
 
 #Registro de cliente
 def registro_cliente(request):
@@ -35,6 +71,7 @@ def registro_cliente(request):
 
 
 #Registro de taller
+@login_required
 def registro_taller(request):
     try:
         mensaje = ""
@@ -184,5 +221,6 @@ def actualizar_taller(request):
 
 
      
+
     
     
