@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block body %}
+<h2>Eliminar cuenta</h2>
+<form action="eliminar_cliente" method="get"> {% csrf_token %}
+    <div class="col-6">
+        <div class="input-group">
+            <span class="input-group-text">Ingrese su rut</span>
+            <input type="text" name="rutClienteFormulario" class="form-control" required />
+            <input type="submit"  class="btn btn-danger" value="Eliminar Cuenta" />
+        </div>
+        <div class="mb-3 col-6">
+            <div class="form-text">
+                {{mensaje}}
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
