@@ -27,4 +27,5 @@ urlpatterns = [
     path('eliminar_cliente',views.eliminar_cliente),
     path('actualizar_taller',views.actualizar_taller),
     path('fx_secion',views.fx_secion),
+    path('loginTaller',views.loginTaller),
 ]

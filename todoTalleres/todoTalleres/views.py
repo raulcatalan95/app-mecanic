@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from . import models
 from django.db.models import Q
 from msilib.schema import Error
+from .models import Representantes
 
 
 def renderBase(request):
@@ -18,6 +19,7 @@ def renderIndex(request):
     return render(request,"index.html",{'sesion_activa':sesion})   
 
 def fx_secion(request):
+    #Esta funcion si detecta una secion activa borra los datos de la secion y deriva a la vista de iniciar secion, en caso de que no se encuentre una secion activa deriva a la inciiar secionz
     try:
         if request.session['sesion_activa'] == 'Taller' or request.session['sesion_activa'] == 'Cliente':
             del request.session['sesion_activa']
@@ -26,7 +28,19 @@ def fx_secion(request):
             return render(request,"iniciar_sesion.html")
     except:
         return render(request,"iniciar_sesion.html")
-       
+
+def loginTaller(request):
+    rep = None
+    try:
+        rep = Representantes.objects.get(rutRepresentante = request.POST["rut_representante"])
+        if(rep.clave == request.POST["clave_representante"]):
+            request.session["sesion_activa"] = "Taller"
+            request.session["sesion_nombre"] = rep.nombre
+            return redirect(renderIndex)
+        else:
+            return render (request,"iniciar_sesion.html", {"mensajeTaller":"contraseña no válida"})
+    except Exception as ex:
+        return render(request,"iniciar_sesion.html", {"mensaje":ex})
 
 #Registro de cliente
 def registro_cliente(request):

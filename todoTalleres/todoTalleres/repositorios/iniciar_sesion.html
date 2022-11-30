@@ -21,7 +21,7 @@
             </td>
         </tr>
     </table>
-    {{mensaje}}
+    {{mensajeConductor}}
 </form>
 <hr>
 <h1>Iniciar Sesión como taller</h1>
@@ -29,11 +29,11 @@
     <table>
         <tr>
             <td>Rut</td>
-            <td><input type="text" name="taller_rut" placeholder="Ingrese rut"/></td>
+            <td><input type="text" name="rut_representante" placeholder="Ingrese rut"/></td>
         </tr>
         <tr>
             <td>Contraseña</td>
-            <td><input type="password" name="taller_clave" placeholder="Ingrese contraseña"/></td>
+            <td><input type="password" name="clave_representante" placeholder="Ingrese contraseña"/></td>
         </tr>
         <tr>
             <td>
@@ -44,6 +44,6 @@
             </td>
         </tr>
     </table>
-    {{mensaje}}
+    {{mensajeTaller}}
 </form>
 {% endblock %}
