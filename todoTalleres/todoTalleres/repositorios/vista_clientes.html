@@ -2,6 +2,19 @@
 {% block body %}
 
 <h1>Vista clientes</h1>
+{{cliente.rutCliente}}
+{{cliente.correo}}
+{{cliente.fechaNacimiento}}
+{{cliente.nick}}
+{{cliente.clave}}
+{{cliente.tipoVehiculo}}
+{{cliente.patente}}
+{{cliente.modelo}}
+{{cliente.marca}}
+{{cliente.anno}}
 
+<a href="">Editar cuenta</a>
+
+<a class="btn btn-primary" href="{% url 'editar_cliente' cliente.rutCliente %}" >Editar Cuenta</a>
 
 {% endblock %}
