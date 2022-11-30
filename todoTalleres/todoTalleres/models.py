@@ -7,7 +7,6 @@ class Representantes(models.Model):
     clave = models.CharField(max_length=50,blank=False)
     telefono = models.CharField(max_length=15,blank=False)
     fechaNacimiento = models.DateField(null=False,blank=False)
-
    
 class Talleres(models.Model):
     rutTaller = models.CharField(primary_key=True,max_length=20)

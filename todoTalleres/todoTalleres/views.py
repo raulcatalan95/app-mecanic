@@ -1,9 +1,32 @@
 from django.shortcuts import render, redirect
 from . import models
 from django.db.models import Q
+from msilib.schema import Error
+
 
 def renderBase(request):
     return render(request,'base.html')
+
+def renderIndex(request):
+    sesion = None
+    try:
+        sesion = request.session['sesion_activa']
+        if sesion != 'Taller' or sesion != 'Cliente' :
+            sesion = None
+    except:
+        sesion = None
+    return render(request,"index.html",{'sesion_activa':sesion})   
+
+def fx_secion(request):
+    try:
+        if request.session['sesion_activa'] == 'Taller' or request.session['sesion_activa'] == 'Cliente':
+            del request.session['sesion_activa']
+            return render(request,"index.html")
+        else:
+            return render(request,"iniciar_sesion.html")
+    except:
+        return render(request,"iniciar_sesion.html")
+       
 
 #Registro de cliente
 def registro_cliente(request):
@@ -62,9 +85,8 @@ def registro_taller(request):
     except:
           return render(request,"CRUD_talleres/registro_taller.html",{'mensaje':mensaje})  
     return render(request,"CRUD_talleres/registro_taller.html",{'mensaje':mensaje})    
-
-       
-#agregar Representante
+     
+#Agregar Representante
 def registro_representante(request):
     try:
         mensaje = ""
@@ -86,9 +108,7 @@ def registro_representante(request):
         return render(request,"CRUD_talleres/registro_representante.html",{'mensaje':mensaje})  
     return render(request,"CRUD_talleres/registro_representante.html",{'mensaje':mensaje})  
 
-
 #Buscar talleres
-
 def buscar_talleres(request):
     mensaje = None
     visibilidad = "visible"
@@ -131,8 +151,6 @@ def eliminar_cliente(request):
         else:
             mensaje = 'Ha ocurrido un problema'        
         return render(request, 'CRUD_clientes/eliminar_cliente.html',{'mensaje':mensaje})
-
-
 
 #Actualizar Taller
 def actualizar_taller(request):

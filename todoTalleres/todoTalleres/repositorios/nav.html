@@ -1,0 +1,20 @@
+{% if sesion_activa == 'Taller' %}
+<nav>
+    Taller
+    <a href="url">Editar Perfil</a>
+    <a href="fx_secion">Cerrar secion</a>
+</nav>
+{% elif sesion_activa == 'Cliente' %}
+<nav>
+    Cliente
+    <a href="url">Editar Perfil</a>
+    <a href="fx_secion">Cerrar secion</a>
+</nav>
+{% elif sesion_activa == None %}
+<nav>
+    App
+    <a href="url">Registrase como cliente</a>
+    <a href="url">Registrase como taller</a>
+    <a href="fx_secion">Iniciar secion</a>
+</nav>
+{% endif %}

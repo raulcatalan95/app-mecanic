@@ -19,11 +19,12 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.renderBase),
+    path('',views.renderIndex),
     path('registro_cliente',views.registro_cliente),
     path('registro_taller',views.registro_taller),
     path('registro_representante',views.registro_representante),
     path('buscar_talleres',views.buscar_talleres),
     path('eliminar_cliente',views.eliminar_cliente),
     path('actualizar_taller',views.actualizar_taller),
+    path('fx_secion',views.fx_secion),
 ]
