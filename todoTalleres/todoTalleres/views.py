@@ -2,8 +2,7 @@ from django.shortcuts import render, redirect
 from . import models
 from django.db.models import Q
 from msilib.schema import Error
-from .models import Representantes
-
+from .models import Representantes,Clientes
 
 def renderBase(request):
     return render(request,'base.html')
@@ -12,7 +11,7 @@ def renderIndex(request):
     sesion = None
     try:
         sesion = request.session['sesion_activa']
-        if sesion != 'Taller' or sesion != 'Cliente' :
+        if sesion != 1 or sesion != 2 :
             sesion = None
     except:
         sesion = None
@@ -21,7 +20,7 @@ def renderIndex(request):
 def fx_secion(request):
     #Esta funcion si detecta una secion activa borra los datos de la secion y deriva a la vista de iniciar secion, en caso de que no se encuentre una secion activa deriva a la inciiar secionz
     try:
-        if request.session['sesion_activa'] == 'Taller' or request.session['sesion_activa'] == 'Cliente':
+        if request.session['sesion_activa'] == 1 or request.session['sesion_activa'] == 2:
             del request.session['sesion_activa']
             return render(request,"index.html")
         else:
@@ -34,12 +33,24 @@ def loginTaller(request):
     try:
         rep = Representantes.objects.get(rutRepresentante = request.POST["rut_representante"])
         if(rep.clave == request.POST["clave_representante"]):
-            request.session["sesion_activa"] = 'Taller'
+            request.session["sesion_activa"] = 1
             return redirect(renderIndex)
         else:
             return render (request,"iniciar_sesion.html", {"mensajeTaller":"contraseña no válida"})
     except Exception as ex:
         return render(request,"iniciar_sesion.html", {"mensajeTaller":ex})
+
+def loginCliente(request):
+    cli = None
+    try:
+        cli = Clientes.objects.get(rutCliente = request.POST["cliente_rut"])
+        if(cli.clave == request.POST["cliente_clave"]):
+            request.session["sesion_activa"] = 2
+            return redirect(renderIndex)
+        else:
+            return render (request,"iniciar_sesion.html", {"mensajeConductor":"contraseña no válida"})
+    except Exception as ex:
+        return render(request,"iniciar_sesion.html", {"mensajeConductor":ex})
 
 #Registro de cliente
 def registro_cliente(request):
