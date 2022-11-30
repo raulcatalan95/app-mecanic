@@ -34,13 +34,12 @@ def loginTaller(request):
     try:
         rep = Representantes.objects.get(rutRepresentante = request.POST["rut_representante"])
         if(rep.clave == request.POST["clave_representante"]):
-            request.session["sesion_activa"] = "Taller"
-            request.session["sesion_nombre"] = rep.nombre
+            request.session["sesion_activa"] = 'Taller'
             return redirect(renderIndex)
         else:
             return render (request,"iniciar_sesion.html", {"mensajeTaller":"contraseña no válida"})
     except Exception as ex:
-        return render(request,"iniciar_sesion.html", {"mensaje":ex})
+        return render(request,"iniciar_sesion.html", {"mensajeTaller":ex})
 
 #Registro de cliente
 def registro_cliente(request):

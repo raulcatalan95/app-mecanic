@@ -1,12 +1,12 @@
 {% if sesion_activa == 'Taller' %}
 <nav>
-    Bienvenido {{nombre}} / Taller
+    Bienvenido / Taller
     <a href="url">Editar Perfil</a>
     <a href="fx_secion">Cerrar secion</a>
 </nav>
 {% elif sesion_activa == 'Cliente' %}
 <nav>
-    Bienvenido {{nombre}} / Cliente
+    Bienvenido / Cliente
     <a href="url">Editar Perfil</a>
     <a href="fx_secion">Cerrar secion</a>
 </nav>
@@ -18,3 +18,4 @@
     <a href="fx_secion">Iniciar secion</a>
 </nav>
 {% endif %}
+
