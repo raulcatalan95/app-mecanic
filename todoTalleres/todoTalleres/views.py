@@ -23,7 +23,7 @@ def irInicioSesion(request):
     except:
         return render(request,"sesion/login.html")
         
-def fxInicioSesion(request):
+def fxInicioSesion(request): 
     usr = None
     try:
         usr = models.Clientes.objects.get(nick = request.POST["form_username"]) 
@@ -31,7 +31,7 @@ def fxInicioSesion(request):
             request.session['sesion_activa'] = 0
             return render(request,"vista_clientes.html",{"cliente":usr})
         else:
-             return render(request,"sesion/login.html"), {"mensaje":"contraseña no válida"}  
+             return render(request,"sesion/login.html",{"mensaje":"contraseña no válida"}) 
     except:
         try:
             usr = models.Representantes.objects.get(correo = request.POST["form_username"])
@@ -39,7 +39,7 @@ def fxInicioSesion(request):
                 request.session['sesion_activa'] = 1
                 return render(request,"vista_talleres.html",{"taller":usr})
             else:
-                return render(request,"sesion/login.html"), {"mensaje":"contraseña no válida"}  
+                return render(request,"sesion/login.html",{"mensaje":"contraseña no válida"}) 
         except:
             return render(request,"sesion/login.html")
           
@@ -51,7 +51,7 @@ def editar_cliente(request,rutCliente):
     if form.is_valid() and request.POST:
         form.save()
         return redirect(fxInicioSesion)
-    return render(request,'CRUD_talleres/editar_cliente.html',{'form': form})
+    return render(request,'CRUD_clientes/editar_cliente.html',{'form': form})
 
 #editar taller
 def editar_taller(request,rutRepresentante):

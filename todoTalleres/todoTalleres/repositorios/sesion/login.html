@@ -3,7 +3,8 @@
 
 <h1>Iniciar Sesión</h1>
 
-<form action="fx_iniciarSesion" method="post"> {% csrf_token %}
+<form action="fxInicioSesion" method="POST">
+    {% csrf_token %} 
     <div class="mb-3 col-6">
         <label class="form-label">Usuario</label>
         <input type="text" class="form-control" name="form_username" />

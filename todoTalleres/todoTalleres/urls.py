@@ -21,7 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.renderBase),
     path('login',views.irInicioSesion),
-    path('fx_iniciarSesion', views.fxInicioSesion),
+    path('fxInicioSesion', views.fxInicioSesion),
     path('registro_cliente',views.registro_cliente),
     path('registro_taller',views.registro_taller),
     path('registro_representante',views.registro_representante),
