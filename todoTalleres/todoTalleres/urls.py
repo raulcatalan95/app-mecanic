@@ -21,6 +21,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.renderBase),
     path('login',views.irInicioSesion),
+    path('vista_clientes',views.vistaClientes),
+    path('vista_talleres',views.vistaTalleres),
     path('fx_iniciarSesion', views.fxInicioSesion),
     path('registro_cliente',views.registro_cliente),
     path('registro_taller',views.registro_taller),

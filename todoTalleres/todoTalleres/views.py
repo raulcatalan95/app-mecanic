@@ -5,6 +5,12 @@ from django.contrib.auth.decorators import login_required
 from . import forms
 from django.contrib.auth import logout
 
+def vistaClientes(request):
+    return render(request,'vista_clientes.html')
+      
+
+def vistaTalleres(request):
+    return render(request,'vista_talleres.html')
 
 def renderBase(request):
     return render(request,'base.html')
@@ -26,7 +32,8 @@ def irInicioSesion(request):
 def fxInicioSesion(request):
     usr = None
     try:
-        usr = models.Clientes.objects.get(nick = request.POST["form_username"]) 
+        usr = models.Clientes.objects.get(nick = request.POST["form_username"])
+        nickname = usr
         if (usr.clave == request.POST["form_password"]):
             request.session['sesion_activa'] = 0
             return render(request,"vista_clientes.html",{"cliente":usr})
