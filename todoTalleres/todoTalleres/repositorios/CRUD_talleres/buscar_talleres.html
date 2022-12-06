@@ -1,5 +1,9 @@
 {% extends "base.html" %}
+
 {% block body %}
+{% block navegador%}
+    {% include "navegadorClientes.html"%}
+{% endblock %}
 <div class="container" id="buscar-taller">
     <h2>Buscar Insumo</h2>
     <form action="buscar_talleres" method="GET" class="row"> {% csrf_token %}
@@ -57,12 +61,10 @@
         
     </table>
     {% endfor %}
-    {{mensaje}}
+{% endblock %}
 </div>
-
 <style>
     #buscar-taller th{
         width: 40%;
     }
 </style>
-{% endblock %}

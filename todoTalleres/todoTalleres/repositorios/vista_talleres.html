@@ -3,5 +3,17 @@
 
 <h1>Vista Talleres</h1>
 
+{{taller.rutTaller}}
+{{taller.razonSocial}}
+{{taller.comuna}}
+{{taller.direccion}}
+{{taller.telefono}}
+{{taller.correo}}
+{{taller.pagina}}
+{{taller.rutRepresentante}}
+
+
+
+<a class="btn btn-primary" href="{% url 'editar_taller' taller.rutRepresentante %}" >Editar Taller</a>
 
 {% endblock %}

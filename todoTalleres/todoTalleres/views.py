@@ -2,8 +2,15 @@ from django.shortcuts import render, redirect
 from . import models
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
+from . import forms
 from django.contrib.auth import logout
 
+def vistaClientes(request):
+    return render(request,'vista_clientes.html')
+      
+
+def vistaTalleres(request):
+    return render(request,'vista_talleres.html')
 
 def renderBase(request):
     return render(request,'base.html')
@@ -11,11 +18,14 @@ def renderBase(request):
 #inicio de sesion
 def irInicioSesion(request):
     try:
-        if request.session['sesion_activa'] == 0 or request.session['sesion_activa'] == 1:
+        if request.session['sesion_activa'] == 0:
             del request.session['sesion_activa']
-            return render(request,"base.html")
+            return render(request,"vista_clientes.html",{})
+        elif request.session['sesion_activa'] == 1:
+            del request.session['sesion_activa']
+            return render(request,"vista_talleres.html")
         else:
-            return render(request,"sesion/login.html")
+            return render(request,"sesion/login.html")   
     except:
         return render(request,"sesion/login.html")
         
@@ -23,22 +33,41 @@ def fxInicioSesion(request):
     usr = None
     try:
         usr = models.Clientes.objects.get(nick = request.POST["form_username"])
-        if usr:
-            if (usr.clave == request.POST["form_password"]):
-                request.session['sesion_activa'] = 0
-                return render(request,"vista_clientes.html")
-            else:
-                return render(request,"sesion/login.html"), {"mensaje":"contraseña no válida"}
+        nickname = usr
+        if (usr.clave == request.POST["form_password"]):
+            request.session['sesion_activa'] = 0
+            return render(request,"vista_clientes.html",{"cliente":usr})
         else:
-            usr = models.Talleres.objects.get(correo = request.POST["form_username"])
+             return render(request,"sesion/login.html"), {"mensaje":"contraseña no válida"}  
+    except:
+        try:
+            usr = models.Representantes.objects.get(correo = request.POST["form_username"])
             if (usr.clave == request.POST["form_password"]):
                 request.session['sesion_activa'] = 1
-                sesion = request.session['sesion_activa']
-                return render(request,"vista_talleres.html",{"sesion":sesion})
+                return render(request,"vista_talleres.html",{"taller":usr})
             else:
-                return render(request,"sesion/login.html"), {"mensaje":"contraseña no válida"}
-    except Exception as ex:
-        return render(request,"sesion/login.html",{"mensaje":ex})
+                return render(request,"sesion/login.html"), {"mensaje":"contraseña no válida"}  
+        except:
+            return render(request,"sesion/login.html")
+          
+
+#editar cliente
+def editar_cliente(request,rutCliente):
+    atencion = models.Clientes.objects.get(rutCliente=rutCliente)
+    form = forms.clienteForm(request.POST or None, request.FILES or None, instance=atencion)
+    if form.is_valid() and request.POST:
+        form.save()
+        return redirect(fxInicioSesion)
+    return render(request,'CRUD_talleres/editar_cliente.html',{'form': form})
+
+#editar taller
+def editar_taller(request,rutRepresentante):
+    atencion = models.Talleres.objects.get(rutRepresentante=rutRepresentante)
+    form = forms.tallerForm(request.POST or None, request.FILES or None, instance=atencion)
+    if form.is_valid() and request.POST:
+        form.save()
+        return redirect(fxInicioSesion)
+    return render(request,'CRUD_talleres/editar_taller.html',{'form': form})
 
 
 #Registro de cliente
@@ -70,8 +99,9 @@ def registro_cliente(request):
     return render(request,"CRUD_clientes/registro_cliente.html",{'mensaje':mensaje})  
 
 
+
+
 #Registro de taller
-@login_required
 def registro_taller(request):
     try:
         mensaje = ""

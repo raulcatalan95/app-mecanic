@@ -21,6 +21,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.renderBase),
     path('login',views.irInicioSesion),
+    path('vista_clientes',views.vistaClientes),
+    path('vista_talleres',views.vistaTalleres),
     path('fx_iniciarSesion', views.fxInicioSesion),
     path('registro_cliente',views.registro_cliente),
     path('registro_taller',views.registro_taller),
@@ -28,5 +30,6 @@ urlpatterns = [
     path('buscar_talleres',views.buscar_talleres),
     path('eliminar_cliente',views.eliminar_cliente),
     path('actualizar_taller',views.actualizar_taller),
-
+    path('editar_cliente/<str:rutCliente>',views.editar_cliente,name='editar_cliente'),
+    path('editar_taller/<str:rutRepresentante>',views.editar_taller,name='editar_taller'),
 ]
