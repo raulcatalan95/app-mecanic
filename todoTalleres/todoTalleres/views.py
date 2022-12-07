@@ -13,14 +13,15 @@ def renderBase(request):
 def irInicioSesion(request):
     try:
         if request.session['sesion_activa'] == 0:
-            del request.session['sesion_activa']
-            return render(request,"vista_clientes.html",{})
+            del request.session['sesion_activa'] 
+            return render(request,"vista_clientes.html")
         elif request.session['sesion_activa'] == 1:
             del request.session['sesion_activa']
             return render(request,"vista_talleres.html")
         else:
             return render(request,"sesion/login.html")   
     except:
+        request.session['sesion_activa'] = 3
         return render(request,"sesion/login.html")
         
 def fxInicioSesion(request): 
@@ -29,7 +30,8 @@ def fxInicioSesion(request):
         usr = models.Clientes.objects.get(nick = request.POST["form_username"]) 
         if (usr.clave == request.POST["form_password"]):
             request.session['sesion_activa'] = 0
-            return render(request,"vista_clientes.html",{"cliente":usr})
+            sesion = request.session['sesion_activa']
+            return render(request,"vista_clientes.html",{"cliente":usr,'sesion_activa':sesion})
         else:
              return render(request,"sesion/login.html",{"mensaje":"contraseña no válida"}) 
     except:
@@ -37,7 +39,8 @@ def fxInicioSesion(request):
             usr = models.Representantes.objects.get(correo = request.POST["form_username"])
             if (usr.clave == request.POST["form_password"]):
                 request.session['sesion_activa'] = 1
-                return render(request,"vista_talleres.html",{"taller":usr})
+                sesion = request.session['sesion_activa']
+                return render(request,"vista_talleres.html",{"taller":usr,'sesion_activa':sesion})
             else:
                 return render(request,"sesion/login.html",{"mensaje":"contraseña no válida"}) 
         except:
@@ -46,21 +49,33 @@ def fxInicioSesion(request):
 
 #editar cliente
 def editar_cliente(request,rutCliente):
+    sesion = None
+    try:
+        sesion = request.session['sesion_activa']
+    except:
+        return redirect(irInicioSesion)
+    
     atencion = models.Clientes.objects.get(rutCliente=rutCliente)
     form = forms.clienteForm(request.POST or None, request.FILES or None, instance=atencion)
     if form.is_valid() and request.POST:
         form.save()
         return redirect(fxInicioSesion)
-    return render(request,'CRUD_clientes/editar_cliente.html',{'form': form})
+    return render(request,'CRUD_clientes/editar_cliente.html',{'form': form,"sesion":sesion})
 
 #editar taller
 def editar_taller(request,rutRepresentante):
+    sesion = None
+    try:
+        sesion = request.session['sesion_activa']
+    except:
+        return redirect(irInicioSesion)
+    
     atencion = models.Talleres.objects.get(rutRepresentante=rutRepresentante)
     form = forms.tallerForm(request.POST or None, request.FILES or None, instance=atencion)
     if form.is_valid() and request.POST:
         form.save()
         return redirect(fxInicioSesion)
-    return render(request,'CRUD_talleres/editar_taller.html',{'form': form})
+    return render(request,'CRUD_talleres/editar_taller.html',{'form': form,"sesion":sesion})
 
 
 #Registro de cliente
@@ -175,6 +190,11 @@ def buscar_talleres(request):
 
 #Eliminar Cliente
 def eliminar_cliente(request):
+    sesion = None
+    try:
+        sesion = request.session['sesion_activa']
+    except:
+        return redirect(irInicioSesion)
     mensaje = None
     try:
         usr = models.Clientes.objects.get(rutCliente = request.GET["rutClienteFormulario"])
@@ -182,66 +202,14 @@ def eliminar_cliente(request):
              usr.delete()
              mensaje = "Cuenta eliminada"
              return render(request, 'base.html',{'mensaje':mensaje})
-
         mensaje="Ingrese su rut correctamente "
-        return render(request, 'CRUD_clientes/eliminar_cliente.html',{'mensaje':mensaje})
+        return render(request, 'CRUD_clientes/eliminar_cliente.html',{'mensaje':mensaje,'sesion':sesion})
     except Exception as ex:
         if str(ex.args).find('does not exist') > 0:
             mensaje = 'Rut no coincide'
         else:
             mensaje = 'Ha ocurrido un problema'        
-        return render(request, 'CRUD_clientes/eliminar_cliente.html',{'mensaje':mensaje})
-
-
-
-#Actualizar Taller
-def actualizar_taller(request):
-    usr = None
-    msj = None
-    try:
-        usr = models.Talleres.objects.get(rutTaller = request.GET["rutTaller"])
-        return render(request, "CRUD_talleres/actualizar_taller.html",{"usr":usr})
-    except:
-        usr = None
-    
-    if usr == None:
-        rutTaller = None
-        try:
-            rutTaller = request.POST["rutTaller"]
-        except:
-            rutTaller = None
-
-        if rutTaller != None:
-            usr = models.Talleres.objects.get(rutTaller = rutTaller)
-
-            rutTaller = request.POST["rutTaller"]
-            razonSocial = request.POST["razonSocial"]
-            comuna = request.POST["comuna"]
-            direccion = request.POST["direccion"]
-            telefono = request.POST["telefono"]
-            correo = request.POST["correo"]
-            pagina = request.POST["pagina"]
-            rutRepresentante = request.POST["rutRepresentante"]
-            usr.razonSocial = razonSocial
-            usr.comuna = comuna
-            usr.direccion = direccion
-            usr.telefono = telefono
-            usr.correo = correo
-            usr.pagina = pagina
-
-            try:
-                usr.save()
-                msj = "Se ha actualizado el insumo"
-            except:
-                msj = f"ha ocurrido un error al actualizar el insumo"
-            return render(request, "CRUD_talleres/actualizar_taller.html",{"msj":msj})
-        else:
-            msj = "No se ha encontrado el insumo"
-            return render(request, "CRUD_talleres/actualizar_taller.html",{"msj":msj})
-    else:
-        msj = "No se encontró el insumo solicitado"
-        return render(request, "CRUD_talleres/actualizar_taller.html",{"msj":msj})
-
+        return render(request, 'CRUD_clientes/eliminar_cliente.html',{'mensaje':mensaje,'sesion':sesion})
 
      
 

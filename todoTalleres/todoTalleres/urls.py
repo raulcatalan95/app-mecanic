@@ -27,7 +27,6 @@ urlpatterns = [
     path('registro_representante',views.registro_representante),
     path('buscar_talleres',views.buscar_talleres),
     path('eliminar_cliente',views.eliminar_cliente),
-    path('actualizar_taller',views.actualizar_taller),
     path('editar_cliente/<str:rutCliente>',views.editar_cliente,name='editar_cliente'),
     path('editar_taller/<str:rutRepresentante>',views.editar_taller,name='editar_taller'),
 ]
