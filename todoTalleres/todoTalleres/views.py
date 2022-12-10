@@ -13,7 +13,7 @@ def vistaTalleres(request):
     return render(request,'vista_talleres.html')
 
 def renderBase(request):
-    return render(request,'base.html')
+    return render(request,'index.html')
     
 #inicio de sesion
 def irInicioSesion(request):

@@ -23,7 +23,7 @@ urlpatterns = [
     path('login',views.irInicioSesion),
     path('vista_clientes',views.vistaClientes),
     path('vista_talleres',views.vistaTalleres),
-    path('fx_iniciarSesion', views.fxInicioSesion),
+    path('fxInicioSesion', views.fxInicioSesion),
     path('registro_cliente',views.registro_cliente),
     path('registro_taller',views.registro_taller),
     path('registro_representante',views.registro_representante),
