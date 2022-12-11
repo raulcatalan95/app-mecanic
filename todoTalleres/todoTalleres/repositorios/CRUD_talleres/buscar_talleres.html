@@ -1,57 +1,70 @@
 {% extends "base.html" %}
+
 {% block body %}
-<h2>Buscar Insumo</h2>
-<form action="buscar_talleres" method="GET"> {% csrf_token %}
-        <input type="text" name="buscar">
-        <input type="submit">
+{% block navegador%}
+    {% include "navegadorClientes.html"%}
+{% endblock %}
+<div class="container" id="buscar-taller">
+    <h2>Buscar Taller</h2>
+    <form action="buscar_talleres" method="GET" class="row"> {% csrf_token %}
+        <div class="col-12 col-lg-6 d-flex">
+        <input type="text" class="form-control mr-lg-2" name="buscar">
+        <input type="submit" class="btn btn-primary" value="Buscar">
+    </div>
 </form>
 
-    <table style="visibility:{{visibilidad}};">
-        {% for taller in talleres %}
-        {{taller}}
+
+{% for taller in talleres %}
+    <table class="table table-bordered table-striped" style="visibility:{{visibilidad}};">
+       <h5 class="mt-4">{{taller}}</h5> 
+       
         <tr>
-            <td><label class="form-label">Rut Taller</label></td>
+            <th scope="row">Rut Taller</th>
             <td >{{taller.rutTaller}}</td>
       
         </tr>
         <tr>
-            <td><label class="form-label">Razon social</label></td>
+            <th scope="row">Razon social</th>
             <td>{{taller.razonSocial}}</td>
          
         </tr>
         <tr>
-            <td><label class="form-label">Comuna</label></td>
+            <th scope="row">Comuna</th>
             <td value="">{{taller.comuna}}</td>
       
         </tr>
         <tr>
-            <td><label class="form-label">Direccion</label></td>
+            <th scope="row">Direccion</th>
             <td value="">{{taller.direccion}}</td>
          
         </tr>
         <tr>
-            <td><label class="form-label">Telefono</label></td>
+            <th scope="row">Telefono</th>
             <td value="">{{taller.telefono}}</td>
       
         </tr>
         <tr>
-            <td><label class="form-label">Correo</label></td>
+            <th scope="row">Correo</th>
             <td value="">{{taller.correo}}</td>
          
         </tr>
         <tr>
-            <td><label class="form-label">Pagina</label></td>
+            <th scope="row">Pagina</th>
             <td value="">{{taller.pagina}}</td>
       
         </tr>
         <tr>
-            <td><label class="form-label">Nombre Representante</label></td>
+            <th scope="row">Nombre Representante</th>
             <td value="">{{taller.rutRepresentante.nombre}}</td>
          
         </tr>
-           {% endfor %}
-
+        
     </table>
-
-    {{mensaje}}
+    {% endfor %}
 {% endblock %}
+</div>
+<style>
+    #buscar-taller th{
+        width: 40%;
+    }
+</style>

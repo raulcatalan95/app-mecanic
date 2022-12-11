@@ -1,56 +1,76 @@
 from django.shortcuts import render, redirect
 from . import models
 from django.db.models import Q
-from msilib.schema import Error
-from .models import Representantes,Clientes
+from django.contrib.auth.decorators import login_required
+from . import forms
+from django.contrib.auth import logout
+
+def vistaClientes(request):
+    return render(request,'vista_clientes.html')
+      
+
+def vistaTalleres(request):
+    return render(request,'vista_talleres.html')
 
 def renderBase(request):
-    return render(request,'base.html')
-
-def renderIndex(request):
-    sesion = None
+    return render(request,'index.html')
+    
+#inicio de sesion
+def irInicioSesion(request):
     try:
-        sesion = request.session['sesion_activa']
-        if sesion != 1 or sesion != 2 :
-            sesion = None
-    except:
-        sesion = None
-    return render(request,"index.html",{'sesion_activa':sesion})   
-
-def fx_secion(request):
-    #Esta funcion si detecta una secion activa borra los datos de la secion y deriva a la vista de iniciar secion, en caso de que no se encuentre una secion activa deriva a la inciiar secionz
-    try:
-        if request.session['sesion_activa'] == 1 or request.session['sesion_activa'] == 2:
+        if request.session['sesion_activa'] == 0:
             del request.session['sesion_activa']
-            return render(request,"index.html")
+            return render(request,"vista_clientes.html")
+        elif request.session['sesion_activa'] == 1:
+            del request.session['sesion_activa']
+            return render(request,"vista_talleres.html")
         else:
-            return render(request,"iniciar_sesion.html")
+            return render(request,"sesion/login.html")   
     except:
-        return render(request,"iniciar_sesion.html")
-
-def loginTaller(request):
-    rep = None
+        return render(request,"sesion/login.html")
+        
+def fxInicioSesion(request):
+    usr = None
     try:
-        rep = Representantes.objects.get(rutRepresentante = request.POST["rut_representante"])
-        if(rep.clave == request.POST["clave_representante"]):
-            request.session["sesion_activa"] = 1
-            return redirect(renderIndex)
+        usr = models.Clientes.objects.get(nick = request.POST["form_username"])
+        if (usr.clave == request.POST["form_password"]):
+            request.session['sesion_activa'] = 0
+            sesion = request.session['sesion_activa']
+            return render(request,"vista_clientes.html",{"cliente":usr,"sesion_activa":sesion})
         else:
-            return render (request,"iniciar_sesion.html", {"mensajeTaller":"contraseña no válida"})
-    except Exception as ex:
-        return render(request,"iniciar_sesion.html", {"mensajeTaller":ex})
+             return render(request,"sesion/login.html"), {"mensaje":"contraseña no válida"}  
+    except:
+        usr = None
+        try:
+            usr = models.Representantes.objects.get(correo = request.POST["form_username"])
+            if (usr.clave == request.POST["form_password"]):
+                request.session['sesion_activa'] = 1
+                sesion = request.session['sesion_activa']
+                return render(request,"vista_talleres.html",{"taller":usr,"sesion_activa":sesion})
+            else:
+                return render(request,"sesion/login.html"), {"mensaje":"contraseña no válida"}  
+        except:
+            return render(request,"sesion/login.html")
+          
 
-def loginCliente(request):
-    cli = None
-    try:
-        cli = Clientes.objects.get(rutCliente = request.POST["cliente_rut"])
-        if(cli.clave == request.POST["cliente_clave"]):
-            request.session["sesion_activa"] = 2
-            return redirect(renderIndex)
-        else:
-            return render (request,"iniciar_sesion.html", {"mensajeConductor":"contraseña no válida"})
-    except Exception as ex:
-        return render(request,"iniciar_sesion.html", {"mensajeConductor":ex})
+#editar cliente
+def editar_cliente(request,rutCliente):
+    atencion = models.Clientes.objects.get(rutCliente=rutCliente)
+    form = forms.clienteForm(request.POST or None, request.FILES or None, instance=atencion)
+    if form.is_valid() and request.POST:
+        form.save()
+        return redirect(fxInicioSesion)
+    return render(request,'CRUD_clientes/editar_cliente.html',{'form': form})
+
+#editar taller
+def editar_taller(request,rutRepresentante):
+    atencion = models.Talleres.objects.get(rutRepresentante=rutRepresentante)
+    form = forms.tallerForm(request.POST or None, request.FILES or None, instance=atencion)
+    if form.is_valid() and request.POST:
+        form.save()
+        return redirect(fxInicioSesion)
+    return render(request,'CRUD_talleres/editar_taller.html',{'form': form})
+
 
 #Registro de cliente
 def registro_cliente(request):
@@ -81,6 +101,8 @@ def registro_cliente(request):
     return render(request,"CRUD_clientes/registro_cliente.html",{'mensaje':mensaje})  
 
 
+
+
 #Registro de taller
 def registro_taller(request):
     try:
@@ -109,8 +131,9 @@ def registro_taller(request):
     except:
           return render(request,"CRUD_talleres/registro_taller.html",{'mensaje':mensaje})  
     return render(request,"CRUD_talleres/registro_taller.html",{'mensaje':mensaje})    
-     
-#Agregar Representante
+
+       
+#agregar Representante
 def registro_representante(request):
     try:
         mensaje = ""
@@ -132,8 +155,17 @@ def registro_representante(request):
         return render(request,"CRUD_talleres/registro_representante.html",{'mensaje':mensaje})  
     return render(request,"CRUD_talleres/registro_representante.html",{'mensaje':mensaje})  
 
+
 #Buscar talleres
+
 def buscar_talleres(request):
+    sesion = None
+    try:
+        sesion = request.session["sesion_activa"]
+    except:
+        mensaje=""
+        return render(request, "sesion/login.html", {'sesion_activa': sesion,'mensaje':mensaje})
+
     mensaje = None
     visibilidad = "visible"
     talleres = ""
@@ -152,10 +184,10 @@ def buscar_talleres(request):
                Q(pagina__contains = buscador)).distinct()
 
         visibilidad = "visible"
-        return render(request, 'CRUD_talleres/buscar_talleres.html',{'mensaje':mensaje,"talleres":talleres,"visibilidad":visibilidad})
+        return render(request, 'CRUD_talleres/buscar_talleres.html',{'mensaje':mensaje,"talleres":talleres,"visibilidad":visibilidad,'sesion_activa': sesion})
     except:
-                   mensaje = 'No se ha encontrado el insumo'
-                   return render(request, 'CRUD_talleres/buscar_talleres.html',{'mensaje':mensaje,"visibilidad":visibilidad})
+                   mensaje = ''
+                   return render(request, 'CRUD_talleres/buscar_talleres.html',{'mensaje':mensaje,"visibilidad":visibilidad,'sesion_activa': sesion})
 
 #Eliminar Cliente
 def eliminar_cliente(request):
@@ -175,6 +207,8 @@ def eliminar_cliente(request):
         else:
             mensaje = 'Ha ocurrido un problema'        
         return render(request, 'CRUD_clientes/eliminar_cliente.html',{'mensaje':mensaje})
+
+
 
 #Actualizar Taller
 def actualizar_taller(request):
@@ -226,5 +260,6 @@ def actualizar_taller(request):
 
 
      
+
     
     

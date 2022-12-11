@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block body %} 
+    <div class="container-fluid">
+        <form method="POST" class="form-control bg-light w-50 m-auto">
+            {% csrf_token %}
+            <h2>Añadir Atencion</h2>  
+            {{form}}
+            <input name="" id="" class="btn btn-success" type="submit" value="Enviar Informacion">
+        </form>
+    </div>
+{% endblock %}
