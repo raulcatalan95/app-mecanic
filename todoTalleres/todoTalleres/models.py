@@ -19,6 +19,12 @@ class Talleres(models.Model):
     pagina = models.CharField(max_length=50,null=True,blank=True)
     rutRepresentante = models.ForeignKey(Representantes,null=True,blank=True,on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.rutTaller
+
+    def get_absolute_url(self):
+        return "/vista_talleres/%i" %self.id
+
 class Clientes(models.Model):
     rutCliente = models.CharField(primary_key=True,max_length=15,blank=False)
     correo = models.CharField(max_length=75,blank=False)
@@ -30,6 +36,14 @@ class Clientes(models.Model):
     modelo = models.CharField(max_length=75)
     marca = models.CharField(max_length=75)
     anno = models.ImageField()
+
+    def __str__(self):
+        return self.rutCliente
+
+    def get_absolute_url(self):
+        return "/vista_clientes/%i" %self.id
+
+
 
 class Comentarios(models.Model):
     comentario = models.CharField(max_length=200,null=False)
