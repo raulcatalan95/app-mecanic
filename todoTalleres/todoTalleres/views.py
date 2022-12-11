@@ -5,15 +5,21 @@ from django.contrib.auth.decorators import login_required
 from . import forms
 from django.contrib.auth import logout
 
+clientes = []
+
 def vistaClientes(request):
     sesion = None
+    context = None
     try:
         sesion = request.session['sesion_activa']
+        if sesion != 0 and sesion !=1:
+            sesion = None
     except:
-        return render(request, "sesion/login.html")
-    return render(request,'vista_clientes.html')
-      
+        sesion = None
+    return render(request, "vista_clientes.html", {'sesion_activa': sesion})
 
+    
+    
 def vistaTalleres(request):
     return render(request,'vista_talleres.html')
 
@@ -33,6 +39,8 @@ def irInicioSesion(request):
             return render(request,"sesion/login.html")   
     except:
         return render(request,"sesion/login.html")
+
+
         
 def fxInicioSesion(request):
     usr = None
@@ -41,6 +49,8 @@ def fxInicioSesion(request):
         if (usr.clave == request.POST["form_password"]):
             request.session['sesion_activa'] = 0
             sesion = request.session['sesion_activa']
+            clientes.append(usr.nick)
+            clientes.append(usr.clave)
             return render(request,"vista_clientes.html",{"cliente":usr,"sesion_activa":sesion})
         else:
              return render(request,"sesion/login.html"), {"mensaje":"contraseña no válida"}  
@@ -55,17 +65,30 @@ def fxInicioSesion(request):
             else:
                 return render(request,"sesion/login.html"), {"mensaje":"contraseña no válida"}  
         except:
-            return render(request,"sesion/login.html")
-          
+            try:
+                usr = models.Clientes.objects.get(nick = clientes[0])
+                if(usr.clave == clientes[1]):
+                    request.session['sesion_activa'] = 0
+                    sesion = request.session['sesion_activa']   
+                return render(request,"vista_clientes.html",{"cliente":usr,"sesion_activa":sesion})
+            except:
+                return render(request,"sesion/login.html")
+           
 
 #editar cliente
 def editar_cliente(request,rutCliente):
+    sesion = None
+    try:
+        sesion = request.session['sesion_activa']
+    except:
+        return redirect("sesion/login.html")
+
     atencion = models.Clientes.objects.get(rutCliente=rutCliente)
     form = forms.clienteForm(request.POST or None, request.FILES or None, instance=atencion)
     if form.is_valid() and request.POST:
         form.save()
         return redirect(fxInicioSesion)
-    return render(request,'CRUD_clientes/editar_cliente.html',{'form': form})
+    return render(request,'CRUD_clientes/editar_cliente.html',{'form': form,'sesion_activa':sesion})
 
 #editar taller
 def editar_taller(request,rutRepresentante):
@@ -109,8 +132,6 @@ def registro_cliente(request):
     except:
         return render(request,"CRUD_clientes/registro_cliente.html",{'mensaje':mensaje})  
     return render(request,"CRUD_clientes/registro_cliente.html",{'mensaje':mensaje})  
-
-
 
 
 #Registro de taller
@@ -218,58 +239,6 @@ def eliminar_cliente(request):
             mensaje = 'Ha ocurrido un problema'        
         return render(request, 'CRUD_clientes/eliminar_cliente.html',{'mensaje':mensaje})
 
-
-
-#Actualizar Taller
-def actualizar_taller(request):
-    usr = None
-    msj = None
-    try:
-        usr = models.Talleres.objects.get(rutTaller = request.GET["rutTaller"])
-        return render(request, "CRUD_talleres/actualizar_taller.html",{"usr":usr})
-    except:
-        usr = None
-    
-    if usr == None:
-        rutTaller = None
-        try:
-            rutTaller = request.POST["rutTaller"]
-        except:
-            rutTaller = None
-
-        if rutTaller != None:
-            usr = models.Talleres.objects.get(rutTaller = rutTaller)
-
-            rutTaller = request.POST["rutTaller"]
-            razonSocial = request.POST["razonSocial"]
-            comuna = request.POST["comuna"]
-            direccion = request.POST["direccion"]
-            telefono = request.POST["telefono"]
-            correo = request.POST["correo"]
-            pagina = request.POST["pagina"]
-            rutRepresentante = request.POST["rutRepresentante"]
-            usr.razonSocial = razonSocial
-            usr.comuna = comuna
-            usr.direccion = direccion
-            usr.telefono = telefono
-            usr.correo = correo
-            usr.pagina = pagina
-
-            try:
-                usr.save()
-                msj = "Se ha actualizado el insumo"
-            except:
-                msj = f"ha ocurrido un error al actualizar el insumo"
-            return render(request, "CRUD_talleres/actualizar_taller.html",{"msj":msj})
-        else:
-            msj = "No se ha encontrado el insumo"
-            return render(request, "CRUD_talleres/actualizar_taller.html",{"msj":msj})
-    else:
-        msj = "No se encontró el insumo solicitado"
-        return render(request, "CRUD_talleres/actualizar_taller.html",{"msj":msj})
-
-
-     
 
     
     
