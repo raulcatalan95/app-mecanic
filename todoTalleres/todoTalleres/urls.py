@@ -20,7 +20,7 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.renderBase),
-    path('login',views.irInicioSesion),
+    path('login',views.irInicioSesion,name="login"),
     path('vista_clientes',views.vistaClientes),
     path('vista_talleres',views.vistaTalleres),
     path('fxInicioSesion', views.fxInicioSesion),

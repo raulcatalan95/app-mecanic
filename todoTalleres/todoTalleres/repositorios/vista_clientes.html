@@ -1,55 +1,58 @@
 {% extends "base.html" %}
 {% block body %}
+{% load static %}
+<nav class="navbar bg-body" >
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img class="imgSize" src='{% static "todotalleres.png" %}' alt="" class="d-inline-block align-text-top">
+        </a>
+        {{sesion_activa}}
 
-{% block navegador%}
-    {% include "navegadorClientes.html"%}
-{% endblock %}
+        {% if sesion_activa == 0 %}
+        <div class="row">
+          <form class="">
+              <div class="row p-3">
+                  <div class="col-7">
+                    <a class="btn btn-primary"  type="submit" href="{% url 'editar_cliente' cliente.rutCliente %}" >Editar cuenta</a>
+                  </div>
+                  <div class="col-5">
+                    <a class="btn btn-primary"  type="submit" href="{% url 'login' %}" >Cerrar sesion</a>
+                  </div>
+              </div> 
+           </form>
+      </div>
+        {% else %}
+        <div class="row">
+          <form class="">
+              <div class="row p-3">
+                  <div class="col-7">
+                      <a href="login" type="submit">Iniciar sesion</a> 
+                  </div>
+                  <div class="col-5">
+                      <a href="login" type="submit">Registro</a>
+                  </div>
+              </div> 
+           </form>
+      </div>
+        {% endif %}
+        
+    </div>
+</nav>
+
 <div class="container">
-<h3 class="mt-3">Bienvenido Cliente {{cliente.nick}}!</h3>
-<div class="row w-100 d-flex">
-
-<table class="table mt-5 col-6">
-    <tbody>
-        <tr class="table-info">
-            <th scope="row"><h3>Mis Datos</h3></th>
-            <td></td>
-          </tr>
-      <tr>
-        <th scope="row">Rut</th>
-        <td>{{cliente.rutCliente}}</td>
-      </tr>
-      <tr>
-        <th scope="row">Correo</th>
-        <td>{{cliente.correo}}</td>
-      </tr>
-      <tr>
-        <th scope="row">Fecha Nacimiento</th>
-        <td>{{cliente.fechaNacimiento}}</td>
-      </tr>
-      <tr>
-        <th scope="row">Marca Vehiculo</th>
-        <td>{{cliente.marca}}</td>
-      </tr>
-      <tr>
-        <th scope="row">Modelo</th>
-        <td>{{cliente.modelo}}</td>
-      </tr>
-      <tr>
-        <th scope="row">Tipo Vehiculo</th>
-        <td>{{cliente.tipoVehiculo}}</td>
-      </tr>
-      <tr>
-        <th scope="row">año</th>
-        <td>{{cliente.anno}}</td>
-      </tr>
-      <tr>
-        <th scope="row">Patente</th>
-        <td>{{cliente.patente}}</td>
-      </tr>
-    </tbody>
-  </table>
-
-<a class="btn btn-primary d-none" href="{% url 'editar_cliente' cliente.rutCliente %}" >Editar Cuenta</a>
+    <div class="row w-50 m-auto">
+        <img class="imgSize2" src='{% static "todotalleres2.png" %}'>
+    </div>
 </div>
+<div class="column">
+    <form action="buscar_talleres" method="GET" class="w-100"> {% csrf_token %}
+        <div class="col-12 col-lg-6 d-flex">
+        <input type="text" class="form-control mr-lg-2" name="buscar">
+        <input type="submit" class="btn btn-primary" value="Buscar">
+    </div>
 </div>
+
+
+
+
 {% endblock %}
