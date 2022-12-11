@@ -6,6 +6,11 @@ from . import forms
 from django.contrib.auth import logout
 
 def vistaClientes(request):
+    sesion = None
+    try:
+        sesion = request.session['sesion_activa']
+    except:
+        return render(request, "sesion/login.html")
     return render(request,'vista_clientes.html')
       
 
@@ -64,12 +69,17 @@ def editar_cliente(request,rutCliente):
 
 #editar taller
 def editar_taller(request,rutRepresentante):
+    sesion = None
+    try:
+        sesion = request.session['sesion_activa']
+    except:
+        return render(request, "sesion/login.html")
     atencion = models.Talleres.objects.get(rutRepresentante=rutRepresentante)
     form = forms.tallerForm(request.POST or None, request.FILES or None, instance=atencion)
     if form.is_valid() and request.POST:
         form.save()
         return redirect(fxInicioSesion)
-    return render(request,'CRUD_talleres/editar_taller.html',{'form': form})
+    return render(request,'CRUD_talleres/editar_taller.html',{'form': form,'sesion':sesion})
 
 
 #Registro de cliente
