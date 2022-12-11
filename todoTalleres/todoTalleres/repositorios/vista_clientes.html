@@ -6,14 +6,15 @@
         <a class="navbar-brand" href="#">
             <img class="imgSize" src='{% static "todotalleres.png" %}' alt="" class="d-inline-block align-text-top">
         </a>
-        {{sesion_activa}}
+        {{cliente}}
 
+        {{sesion_activa}}
         {% if sesion_activa == 0 %}
         <div class="row">
           <form class="">
               <div class="row p-3">
                   <div class="col-7">
-                    <a class="btn btn-primary"  type="submit" href="{% url 'editar_cliente' cliente.rutCliente %}" >Editar cuenta</a>
+                 <a class="btn btn-primary"  type="submit" href="{% url 'editar_cliente' cliente.rutCliente %}" >Editar cuenta</a>
                   </div>
                   <div class="col-5">
                     <a class="btn btn-primary"  type="submit" href="{% url 'login' %}" >Cerrar sesion</a>
@@ -35,7 +36,6 @@
            </form>
       </div>
         {% endif %}
-        
     </div>
 </nav>
 
@@ -51,6 +51,7 @@
         <input type="submit" class="btn btn-primary" value="Buscar">
     </div>
 </div>
+
 
 
 
