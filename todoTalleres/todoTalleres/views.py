@@ -20,7 +20,7 @@ def irInicioSesion(request):
     try:
         if request.session['sesion_activa'] == 0:
             del request.session['sesion_activa']
-            return render(request,"vista_clientes.html",{})
+            return render(request,"vista_clientes.html")
         elif request.session['sesion_activa'] == 1:
             del request.session['sesion_activa']
             return render(request,"vista_talleres.html")
@@ -33,18 +33,20 @@ def fxInicioSesion(request):
     usr = None
     try:
         usr = models.Clientes.objects.get(nick = request.POST["form_username"])
-        nickname = usr
         if (usr.clave == request.POST["form_password"]):
             request.session['sesion_activa'] = 0
-            return render(request,"vista_clientes.html",{"cliente":usr})
+            sesion = request.session['sesion_activa']
+            return render(request,"vista_clientes.html",{"cliente":usr,"sesion_activa":sesion})
         else:
              return render(request,"sesion/login.html"), {"mensaje":"contraseña no válida"}  
     except:
+        usr = None
         try:
             usr = models.Representantes.objects.get(correo = request.POST["form_username"])
             if (usr.clave == request.POST["form_password"]):
                 request.session['sesion_activa'] = 1
-                return render(request,"vista_talleres.html",{"taller":usr})
+                sesion = request.session['sesion_activa']
+                return render(request,"vista_talleres.html",{"taller":usr,"sesion_activa":sesion})
             else:
                 return render(request,"sesion/login.html"), {"mensaje":"contraseña no válida"}  
         except:
@@ -58,7 +60,7 @@ def editar_cliente(request,rutCliente):
     if form.is_valid() and request.POST:
         form.save()
         return redirect(fxInicioSesion)
-    return render(request,'CRUD_talleres/editar_cliente.html',{'form': form})
+    return render(request,'CRUD_clientes/editar_cliente.html',{'form': form})
 
 #editar taller
 def editar_taller(request,rutRepresentante):
@@ -157,6 +159,13 @@ def registro_representante(request):
 #Buscar talleres
 
 def buscar_talleres(request):
+    sesion = None
+    try:
+        sesion = request.session["sesion_activa"]
+    except:
+        mensaje=""
+        return render(request, "sesion/login.html", {'sesion_activa': sesion,'mensaje':mensaje})
+
     mensaje = None
     visibilidad = "visible"
     talleres = ""
@@ -175,10 +184,10 @@ def buscar_talleres(request):
                Q(pagina__contains = buscador)).distinct()
 
         visibilidad = "visible"
-        return render(request, 'CRUD_talleres/buscar_talleres.html',{'mensaje':mensaje,"talleres":talleres,"visibilidad":visibilidad})
+        return render(request, 'CRUD_talleres/buscar_talleres.html',{'mensaje':mensaje,"talleres":talleres,"visibilidad":visibilidad,'sesion_activa': sesion})
     except:
-                   mensaje = 'No se ha encontrado el insumo'
-                   return render(request, 'CRUD_talleres/buscar_talleres.html',{'mensaje':mensaje,"visibilidad":visibilidad})
+                   mensaje = ''
+                   return render(request, 'CRUD_talleres/buscar_talleres.html',{'mensaje':mensaje,"visibilidad":visibilidad,'sesion_activa': sesion})
 
 #Eliminar Cliente
 def eliminar_cliente(request):
