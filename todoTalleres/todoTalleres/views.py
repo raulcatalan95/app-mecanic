@@ -56,7 +56,7 @@ def fxInicioSesion(request):
             clientes.append(usr.clave)
             return render(request,"vista_clientes.html",{"cliente":usr,"sesion_activa":sesion})
         else:
-             return render(request,"sesion/login.html"), {"mensaje":"contraseña no válida"}  
+             return redirect(irInicioSesion)
     except:
         usr = None
         try:
@@ -68,7 +68,7 @@ def fxInicioSesion(request):
                 representantes.append(usr.clave)
                 return render(request,"vista_talleres.html",{"taller":usr,"sesion_activa":sesion})
             else:
-                return render(request,"sesion/login.html"), {"mensaje":"contraseña no válida"}  
+                return redirect(irInicioSesion)
         except:
             try:
                 usr = models.Clientes.objects.get(nick = clientes[0])
@@ -85,9 +85,9 @@ def fxInicioSesion(request):
                      sesion = request.session['sesion_activa']
                      return render(request,"vista_talleres.html",{"taller":usr,"sesion_activa":sesion})
                     else:
-                     return render(request,"sesion/login.html"), {"mensaje":"contraseña no válida"}  
+                     return redirect(irInicioSesion)
                 except:
-                    return render(request,"sesion/login.html")
+                    return redirect(irInicioSesion)
                
            
 
