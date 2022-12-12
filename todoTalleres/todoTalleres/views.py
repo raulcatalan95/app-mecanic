@@ -8,6 +8,7 @@ from msilib.schema import Error
 from datetime import date
 
 clientes = []
+representantes = []
 
 def vistaClientes(request):
     sesion = None
@@ -31,9 +32,11 @@ def irInicioSesion(request):
     try:
         if request.session['sesion_activa'] == 0:
             del request.session['sesion_activa']
+            clientes.clear()
             return render(request,"vista_clientes.html")
         elif request.session['sesion_activa'] == 1:
             del request.session['sesion_activa']
+            representantes.clear()
             return render(request,"vista_talleres.html")
         else:
             return render(request,"sesion/login.html")   
@@ -59,6 +62,8 @@ def fxInicioSesion(request):
             if (usr.clave == request.POST["form_password"]):
                 request.session['sesion_activa'] = 1
                 sesion = request.session['sesion_activa']
+                representantes.append(usr.correo)
+                representantes.append(usr.clave)
                 return render(request,"vista_talleres.html",{"taller":usr,"sesion_activa":sesion})
             else:
                 return render(request,"sesion/login.html"), {"mensaje":"contraseña no válida"}  
@@ -70,7 +75,19 @@ def fxInicioSesion(request):
                     sesion = request.session['sesion_activa']   
                 return render(request,"vista_clientes.html",{"cliente":usr,"sesion_activa":sesion})
             except:
-                return render(request,"sesion/login.html")       
+                usr = None
+                try:
+                    usr = models.Representantes.objects.get(correo = representantes[0])
+                    if (usr.clave == representantes[1]):
+                     request.session['sesion_activa'] = 1
+                     sesion = request.session['sesion_activa']
+                     return render(request,"vista_talleres.html",{"taller":usr,"sesion_activa":sesion})
+                    else:
+                     return render(request,"sesion/login.html"), {"mensaje":"contraseña no válida"}  
+                except:
+                    return render(request,"sesion/login.html")
+               
+           
 
 #editar cliente
 def editar_cliente(request,rutCliente):
@@ -80,13 +97,15 @@ def editar_cliente(request,rutCliente):
     except:
         return redirect("sesion/login.html")
 
-    atencion = models.Clientes.objects.get(rutCliente=rutCliente)
-    form = forms.clienteForm(request.POST or None, request.FILES or None, instance=atencion)
-    if form.is_valid() and request.POST:
-        form.save()
-        return redirect(fxInicioSesion)
-    return render(request,'CRUD_clientes/editar_cliente.html',{'form': form,'sesion_activa':sesion})
-
+    if sesion == 0:
+        atencion = models.Clientes.objects.get(rutCliente=rutCliente)
+        form = forms.clienteForm(request.POST or None, request.FILES or None, instance=atencion)
+        if form.is_valid() and request.POST:
+            form.save()
+            return redirect(fxInicioSesion)
+        return render(request,'CRUD_clientes/editar_cliente.html',{'form': form,'sesion_activa':sesion})
+    else:
+        return redirect(irInicioSesion)
 #editar taller
 def editar_taller(request,rutRepresentante):
     sesion = None
@@ -94,12 +113,15 @@ def editar_taller(request,rutRepresentante):
         sesion = request.session['sesion_activa']
     except:
         return render(request, "sesion/login.html")
-    atencion = models.Talleres.objects.get(rutRepresentante=rutRepresentante)
-    form = forms.tallerForm(request.POST or None, request.FILES or None, instance=atencion)
-    if form.is_valid() and request.POST:
-        form.save()
-        return redirect(fxInicioSesion)
-    return render(request,'CRUD_talleres/editar_taller.html',{'form': form,'sesion':sesion})
+    if sesion==1:
+        atencion = models.Talleres.objects.get(rutRepresentante=rutRepresentante)
+        form = forms.tallerForm(request.POST or None, request.FILES or None, instance=atencion)
+        if form.is_valid() and request.POST:
+           form.save()
+           return redirect(fxInicioSesion)
+        return render(request,'CRUD_talleres/editar_taller.html',{'form': form,'sesion':sesion})
+    else:
+        return redirect(irInicioSesion)
 
 
 #Registro de cliente
