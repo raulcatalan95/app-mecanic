@@ -43,8 +43,6 @@ class Clientes(models.Model):
     def get_absolute_url(self):
         return "/vista_clientes/%i" %self.id
 
-
-
 class Comentarios(models.Model):
     comentario = models.CharField(max_length=200,null=False)
     evaluacion = models.IntegerField(null=False)
@@ -68,3 +66,12 @@ class listadoPrecios(models.Model):
     precio = models.CharField(max_length=25, null=False)
     rutTaller = models.ForeignKey(Talleres,on_delete=models.CASCADE)
     idServicios = models.ForeignKey(ServiciosDisponibles,null=True,blank=True,on_delete=models.CASCADE)
+
+class Clasificacion(models.Model):
+    taller = models.ForeignKey(Talleres,null=True,blank=True,on_delete=models.CASCADE)
+    cantidad = models.IntegerField(null=False,default=0)
+    promedio = models.FloatField(null=False,default=0)
+
+class FechaRegistro(models.Model):
+    rut = models.CharField(primary_key=True,max_length=20)
+    fecha = models.DateField(null=False)

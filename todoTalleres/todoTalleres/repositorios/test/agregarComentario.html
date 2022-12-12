@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="container">
+    <h3>Agregar comentario</h3>
+    <div class="col-10">
+        <form action="fxAgregarComentario" method="GET"> {% csrf_token %}
+
+            <table class="table">
+                <tr>
+                    <th><label>id</label></th>
+                    <th><input type="text" name="id"></th>
+                </tr>
+                <tr>
+                    <th><label>comentario</label></th>
+                    <th><input type="text" name="comentario"></th>
+                </tr>
+                <tr>
+                    <th><label>evaluacion</label></th>
+                    <th><input type="number" name="evaluacion"></th>
+                </tr>
+                <tr>
+                    <th><label>rutTaller</label></th>
+                    <th><input type="text" name="rutTaller"></th>
+                </tr>
+                <tr>
+                    <th><label>rutCliente</label></th>
+                    <th><input type="text" name="rutCliente"></th>
+                </tr>
+                <tr>
+                    <th><label></label></th>
+                    <th><input type="submit" class="btn btn-success" value="Registrar"></th>
+                </tr>
+            </table>
+
+
+        </form>
+    </div>
+    {{msj}}
+</div>
+{% endblock %}
+<!--
+class Comentarios(models.Model):
+    comentario = models.CharField(max_length=200,null=False)
+    evaluacion = models.IntegerField(null=False)
+    rutTaller = models.ForeignKey(Talleres,null=True,blank=True,on_delete=models.CASCADE)
+    rutCliente = models.ForeignKey(Clientes,null=True,blank=True,on_delete=models.CASCADE)
+    fecha = models.DateField(null=False)
+-->

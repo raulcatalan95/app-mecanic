@@ -31,4 +31,7 @@ urlpatterns = [
     path('eliminar_cliente',views.eliminar_cliente),
     path('editar_cliente/<str:rutCliente>/',views.editar_cliente,name='editar_cliente'),
     path('editar_taller/<str:rutRepresentante>/',views.editar_taller,name='editar_taller'),
+    # prueba borrar
+    path('iragregarComentario',views.irAgregarComentario),
+    path('fxAgregarComentario',views.fxAgregarComentario),
 ]

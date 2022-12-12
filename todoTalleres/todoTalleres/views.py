@@ -4,6 +4,8 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from . import forms
 from django.contrib.auth import logout
+from msilib.schema import Error
+from datetime import date
 
 clientes = []
 
@@ -17,9 +19,7 @@ def vistaClientes(request):
     except:
         sesion = None
     return render(request, "vista_clientes.html", {'sesion_activa': sesion})
-
-    
-    
+ 
 def vistaTalleres(request):
     return render(request,'vista_talleres.html')
 
@@ -39,8 +39,6 @@ def irInicioSesion(request):
             return render(request,"sesion/login.html")   
     except:
         return render(request,"sesion/login.html")
-
-
         
 def fxInicioSesion(request):
     usr = None
@@ -72,8 +70,7 @@ def fxInicioSesion(request):
                     sesion = request.session['sesion_activa']   
                 return render(request,"vista_clientes.html",{"cliente":usr,"sesion_activa":sesion})
             except:
-                return render(request,"sesion/login.html")
-           
+                return render(request,"sesion/login.html")       
 
 #editar cliente
 def editar_cliente(request,rutCliente):
@@ -122,6 +119,7 @@ def registro_cliente(request):
 
         models.Clientes.objects.create(rutCliente = rutCliente,correo=correo, fechaNacimiento=fechaNacimiento, nick=nick, clave=clave, tipoVehiculo=tipoVehiculo, patente=patente,
         modelo=modelo,marca=marca,anno=anno)
+        models.FechaRegistro.objects.create(rut = rutCliente,fecha = date.today())
 
         mensaje = f"Se ha regitrado el Cliente {rutCliente}"
     except Exception as ex:
@@ -150,6 +148,7 @@ def registro_taller(request):
 
         models.Talleres.objects.create(rutTaller = rutTaller,razonSocial=razonSocial, comuna=comuna, direccion=direccion, telefono=telefono, correo=correo, pagina=pagina,
         rutRepresentante=rutModel)
+        models.FechaRegistro.objects.create(rut = rutTaller,fecha = date.today())
 
         mensaje = f"Taller creado: {rutModel}"
         return render(request,"CRUD_talleres/registro_taller.html",{'mensaje':mensaje})  
@@ -175,6 +174,7 @@ def registro_representante(request):
         telefono = request.POST['telefono']
         fechaNacimiento = request.POST['fechaNacimiento']
         models.Representantes.objects.create(rutRepresentante = rutRepresentante,nombre=nombre, correo=correo, clave=clave, telefono=telefono, fechaNacimiento=fechaNacimiento)
+        models.FechaRegistro.objects.create(rut = rutRepresentante,fecha = date.today())
 
         mensaje = f"Se ha regitrado el Cliente {rutRepresentante}"
     except Exception as ex:
@@ -239,6 +239,23 @@ def eliminar_cliente(request):
             mensaje = 'Ha ocurrido un problema'        
         return render(request, 'CRUD_clientes/eliminar_cliente.html',{'mensaje':mensaje})
 
+# FUNCIONES DE PRUEBA // ELIMINAR
 
+def irAgregarComentario(request):
+    return render(request,'test/agregarComentario.html')
+
+def fxAgregarComentario(request):
+    msj = None
+
+    _id = request.GET['id'] 
+    _comentario = request.GET['comentario']
+    _evaluacion = request.GET['evaluacion']
+    _rutTaller = request.GET['rutTaller']
+    _rutCliente = request.GET['rutCliente']
     
-    
+    try:
+        models.Comentarios.objects.create(id = _id , comentario = _comentario, evaluacion = _evaluacion , rutTaller = _rutTaller , rutCliente = _rutCliente , fecha = date.today())
+        msj = 'comentario registrado'
+    except Error as err:
+        msj = f'\n Ha ocurrido un error en la operacion {err}'
+    return render(request,'test/agregarComentario.html', {'msj': msj}) 
