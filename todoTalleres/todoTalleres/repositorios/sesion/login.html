@@ -5,22 +5,50 @@
 {% endblock %}
 
 
+<div class="container mt-5">
+    <div class="login ">
+       <br>
+       <br>
+            <div class="form-icon">
+                <span><i class="icon icon-user"></i></span>   
 
-<div class="login ">
-    <div class="form-icon">
-        <span><i class="icon icon-user"></i></span>   
+            </div>
+            <form action="fxInicioSesion" method="post" class=""> {% csrf_token %}
+                <input type="text" name="form_username" placeholder="Escribe tu nick o correo electronico" required="required" />
+                <input type="password" name="form_password" placeholder="Contraseña" required="required" />
+                <div>
+                    <br>
+                    <input type="submit" class="btn btn-primary btn-block btn-large" value="Iniciar sesion."></input>
+                </div>
+                
+            </form>
     </div>
-    <form action="fxInicioSesion" method="post" class=""> {% csrf_token %}
-    	<input type="text" name="form_username" placeholder="Username" required="required" />
-        <input type="password" name="form_password" placeholder="Password" required="required" />
-        <input type="submit" class="btn btn-primary btn-block btn-large" value="Iniciar sesion."></input>
-    </form>
 </div>
 
+
+
+
 <style>
+  
+
+body{
+    background-color:#0A1128;
+}
+
+.container{
+    border-radius: 10px;
+    min-width: 550px;
+    width: 550px;
+    height: 500px;
+    background-color: white;
+}
+
+
+
+
 .form-icon{
 	text-align: center;
-    background-color: #5891ff;
+    background-color: #457B9D;
     border-radius: 50%;
     font-size: 50px;
     color: white;
@@ -53,12 +81,9 @@ body {
 
 }
 .login { 
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	margin: -175px 0 0 -175px;
-	width:350px;
-	height:350px;
+    margin:0px auto;
+	width:400px;
+	height:400px;
 }
 .login h1 { color: gray; letter-spacing:1px; text-align:center; }
 
