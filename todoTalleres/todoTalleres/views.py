@@ -6,13 +6,14 @@ from . import forms
 from django.contrib.auth import logout
 from datetime import date
 from datetime import datetime
+from msilib.schema import Error
 
 clientes = []
 representantes = []
 
 def vistaClientes(request):
     sesion = None
-    context = None
+    # context = None
     try:
         sesion = request.session['sesion_activa']
         if sesion != 0 and sesion !=1:
@@ -20,8 +21,6 @@ def vistaClientes(request):
     except:
         sesion = None
     return render(request, "vista_clientes.html", {'sesion_activa': sesion})
-
-    
     
 def vistaTalleres(request):
     return render(request,'vista_talleres.html')
@@ -45,8 +44,6 @@ def irInicioSesion(request):
     except:
         return render(request,"sesion/login.html")
 
-
-        
 def fxInicioSesion(request):
     usr = None
     try:
@@ -56,6 +53,9 @@ def fxInicioSesion(request):
             sesion = request.session['sesion_activa']
             clientes.append(usr.nick)
             clientes.append(usr.clave)
+            #
+            models.Login.objects.create(rut = usr.rutCliente,fecha = date.today(),tipo = "Cliente")
+            #
             return render(request,"vista_clientes.html",{"cliente":usr,"sesion_activa":sesion})
         else:
              return redirect(irInicioSesion)
@@ -68,6 +68,9 @@ def fxInicioSesion(request):
                 sesion = request.session['sesion_activa']
                 representantes.append(usr.correo)
                 representantes.append(usr.clave)
+                #
+                models.Login.objects.create(rut = usr.rutRepresentante,fecha = date.today(),tipo = "Representante")
+                #
                 return render(request,"vista_talleres.html",{"taller":usr,"sesion_activa":sesion})
             else:
                 return redirect(irInicioSesion)
@@ -76,7 +79,10 @@ def fxInicioSesion(request):
                 usr = models.Clientes.objects.get(nick = clientes[0])
                 if(usr.clave == clientes[1]):
                     request.session['sesion_activa'] = 0
-                    sesion = request.session['sesion_activa']   
+                    sesion = request.session['sesion_activa']
+                #
+                models.Login.objects.create(rut = usr.rutCliente,fecha = date.today(),tipo = "Cliente")
+                #   
                 return render(request,"vista_clientes.html",{"cliente":usr,"sesion_activa":sesion})
             except:
                 usr = None
@@ -85,14 +91,15 @@ def fxInicioSesion(request):
                     if (usr.clave == representantes[1]):
                      request.session['sesion_activa'] = 1
                      sesion = request.session['sesion_activa']
+                    #
+                     models.Login.objects.create(rut = usr.rutRepresentante,fecha = date.today(),tipo = "Representante")
+                    #
                      return render(request,"vista_talleres.html",{"taller":usr,"sesion_activa":sesion})
                     else:
                      return redirect(irInicioSesion)
                 except:
                     return redirect(irInicioSesion)
                
-           
-
 #editar cliente
 def editar_cliente(request,rutCliente):
     sesion = None
@@ -110,6 +117,7 @@ def editar_cliente(request,rutCliente):
         return render(request,'CRUD_clientes/editar_cliente.html',{'form': form,'sesion_activa':sesion})
     else:
         return redirect(irInicioSesion)
+
 #editar taller
 def editar_taller(request,rutRepresentante):
     sesion = None
@@ -126,7 +134,6 @@ def editar_taller(request,rutRepresentante):
         return render(request,'CRUD_talleres/editar_taller.html',{'form': form,'sesion':sesion})
     else:
         return redirect(irInicioSesion)
-
 
 #Registro de cliente
 def registro_cliente(request):
@@ -145,8 +152,9 @@ def registro_cliente(request):
 
         models.Clientes.objects.create(rutCliente = rutCliente,correo=correo, fechaNacimiento=fechaNacimiento, nick=nick, clave=clave, tipoVehiculo=tipoVehiculo, patente=patente,
         modelo=modelo,marca=marca,anno=anno)
-
+        models.FechaRegistro.objects.create(rut = rutCliente,fecha = date.today(),tipo = "Cliente" ,accion = "Create" )
         mensaje = f"Se ha regitrado el Cliente {rutCliente}"
+
     except Exception as ex:
         if str(ex.__cause__).find('todoTalleres_clientes.rutCliente') > 0:
             mensaje = 'Ya existe un registro con ese rut'
@@ -173,6 +181,7 @@ def registro_taller(request):
 
         models.Talleres.objects.create(rutTaller = rutTaller,razonSocial=razonSocial, comuna=comuna, direccion=direccion, telefono=telefono, correo=correo, pagina=pagina,
         rutRepresentante=rutModel)
+        models.FechaRegistro.objects.create(rut = rutTaller,fecha = date.today(),tipo = "Taller" ,accion = "Create" )
 
         mensaje = f"Taller creado: {rutModel}"
         return render(request,"CRUD_talleres/registro_taller.html",{'mensaje':mensaje})  
@@ -197,7 +206,9 @@ def registro_representante(request):
         clave = request.POST['clave']
         telefono = request.POST['telefono']
         fechaNacimiento = request.POST['fechaNacimiento']
+
         models.Representantes.objects.create(rutRepresentante = rutRepresentante,nombre=nombre, correo=correo, clave=clave, telefono=telefono, fechaNacimiento=fechaNacimiento)
+        models.FechaRegistro.objects.create(rut = rutRepresentante,fecha = date.today(),tipo = "Representante" ,accion = "Create" )
 
         mensaje = f"Se ha regitrado el Cliente {rutRepresentante}"
     except Exception as ex:
