@@ -14,98 +14,173 @@
         <input type="submit" class="btn btn-primary" value="Buscar">
     </div>
 </form>
-
-
-
 {% for taller in talleres %}
-    <table class="table table-bordered table-striped" style="visibility:{{visibilidad}};">
-       <h5 class="mt-4">{{taller}}</h5>       
-        <tr>
-            <th scope="row">Rut Taller</th>
-            <td >{{taller.rutTaller}}</td>
-      
-        </tr>
-        <tr>
-            <th scope="row">Razon social</th>
-            <td>{{taller.razonSocial}}</td>
-         
-        </tr>
-        <tr>
-            <th scope="row">Comuna</th>
-            <td value="">{{taller.comuna}}</td>
-      
-        </tr>
-        <tr>
-            <th scope="row">Direccion</th>
-            <td value="">{{taller.direccion}}</td>
-         
-        </tr>
-        <tr>
-            <th scope="row">Telefono</th>
-            <td value="">{{taller.telefono}}</td>
-      
-        </tr>
-        <tr>
-            <th scope="row">Correo</th>
-            <td value="">{{taller.correo}}</td>
-         
-        </tr>
-        <tr>
-            <th scope="row">Pagina</th>
-            <td value="">{{taller.pagina}}</td>
-      
-        </tr>
-        <tr>
-            <th scope="row">Nombre Representante</th>
-            <td value="">{{taller.rutRepresentante.nombre}}</td>
-         
-        </tr>
-   
-    </table>
-    <div class="row w-100">
-        {% for comentario in comment %}
-        {% if comentario.rutTaller == taller %}
-        <div class="row w-100">
-            <h4>Usuario: {{comentario.rutCliente.nick}}</h4>
-        </div>
-        <div class="container-fluid">
-            <textarea class="w-100" name="" disabled rows="5">{{comentario.comentario}}</textarea>
-        </div>  
-        {% endif %}
-        {% endfor %}
+<div class="card-todotalleres mt-5  mb-2 row d-flex justify-content-start align-items-center">
+    <div class="img-taller col-4">
+        <img src='static/todotalleres2.png' alt="imagen">
     </div>
-
-{{now}}
-    <form action="buscar_talleres" method="POST">
-        {% csrf_token %}
-
-     <div style="visibility: hidden;">
-        <input type="text" name="rutTaller" value="{{taller.rutTaller}}" maxlength="20" required="" id="id_rutTaller">
-        <input type="text" value="{{usr.rutCliente}}" name="rutCliente" maxlength="15" required="" id="id_rutCliente">
-     </div>
-          
+    <div class="body-todotalleres justify-content-end col-8 pt-3">
+        <h4 class="comuna-taller mb-3">{{taller.comuna}}</h4>
+        <div class="d-flex row mb-3">
+            <p class="col-6">{{taller.direccion}}</p>
+            <p class="col-6">{{taller.telefono}}</p>
+        </div>
+        <div class="d-flex row mb-3">
+            <p class="col-6">{{taller.correo}}</p>
+            <p class="col-6">{{taller.pagina}}</p>
+        </div>
+        <div class=" row d-flex w-100 justify-content-beetwen">
+            <form class="calificacion col-6">
+                <p class="clasificacion">
+                  <input id="radio11" type="radio" name="estrella" disabled value="5"><!--
+                  --><label for="radio11">★</label><!--
+                  --><input id="radio22" type="radio" name="estrella" disabled checked value="4"><!--
+                  --><label for="radio22">★</label><!--
+                  --><input id="radio33" type="radio" name="estrella" disabled value="3"><!--
+                  --><label for="radio33">★</label><!--
+                  --><input id="radio44" type="radio" name="estrella" disabled value="2"><!--
+                  --><label for="radio44">★</label><!--
+                  --><input id="radio55" type="radio" name="estrella" disabled value="1"><!--
+                  --><label for="radio55">★</label>
+                </p>
+              </form>
+            <a href="#" class="col-6 d-flex justify-content-end" id="ver-comentarios" data-toggle="modal" data-target="#staticBackdrop">Ver Comentarios...</a>
+        </div>
        
-        <div class="row">
-            <div class="col">
-                <label for="">Comentario</label>
-                <input class="form-control" type="text" name="comentario">
+        
+    </div>
+</div>
+  <!-- Modal -->
+  <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Comentarios</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="container">
+                <div class="row w-100" >
+                    {% for comentario in comment %}
+                    {% if comentario.rutTaller == taller %}
+                    <div class="row ">
+                        <h4 class="ml-3">Usuario: {{comentario.rutCliente}}</h4>
+                        <h4>taller: {{comentario.rutTaller}} </h4>
+                    </div>
+                    <div class="container-fluid">
+                        <textarea class="w-100" name="" disabled rows="5">{{comentario.comentario}}</textarea>
+                    </div>  
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                
+                {{now}}
+                <form action="buscar_talleres" method="POST">
+                    {% csrf_token %}
+                
+                 <div style="visibility: hidden;">
+                    <input type="text" name="rutTaller" value="{{taller.rutTaller}}" maxlength="20" required="" id="id_rutTaller">
+                    <input type="text" value="{{usr.rutCliente}}" name="rutCliente" maxlength="15" required="" id="id_rutCliente">
+                 </div>
+                      
+                   
+                    <div class="row">
+                        <div class="col">
+                            <h5>Comenta</h5>
+                            <input class="form-control" type="text" name="comentario">
+                        </div>
+                        <div class="col-2">
+                            <label for="">Fecha</label>
+                            <input class="form-control" type="date" value="" name="fecha" id="">
+                        </div>
+                    </div>
+                    <br>
+                    <h5>Evalua</h5>
+                    <p class="clasificacion">
+                        <input id="radio1" type="radio" name="evaluacion"  value="5"><!--
+                        --><label for="radio1">★</label><!--
+                        --><input id="radio2" type="radio" name="evaluacion" value="4"><!--
+                        --><label for="radio2">★</label><!--
+                        --><input id="radio3" type="radio" name="evaluacion" value="3"><!--
+                        --><label for="radio3">★</label><!--
+                        --><input id="radio4" type="radio" name="evaluacion" value="2"><!--
+                        --><label for="radio4">★</label><!--
+                        --><input id="radio5" type="radio" name="evaluacion" value="1"><!--
+                        --><label for="radio5">★</label>
+                      </p>
+                 
+                      <input type="submit" class="btn btn-primary" value="Enviar">
+                </form>
             </div>
-            <div class="col-2">
-                <label for="">Fecha</label>
-                <input class="form-control" type="date" value="" name="fecha" id="">
             </div>
         </div>
-        <br>
-        <label for="">Evaluacion</label>
-        <input type="number" name="evaluacion">
-     
-          <input type="submit" value="Enviar">
-    </form>
-    {% endfor %}
-{% endblock %}
+      </div>
+    </div>
+  
+
+
+
+{% endfor %}
 </div>
 <style>
+   
     #buscar-taller th{
         width: 40%;
     }
+    #buscar-taller .card-todotalleres{
+        width: 80%;
+        border: solid rgb(238, 236, 236) 1px;
+        border-radius: 10px;
+        box-shadow: 11px 10px 20px #dddddd;
+        
+    }
+    #buscar-taller .card-todotalleres:hover{
+        box-shadow: 11px 10px 10px #dddddd;
+        transform: translateX(0px) translateY(-1px)!important;
+
+    }
+    #buscar-taller .card-todotalleres .img-taller img{
+        height: 220px;
+        width: 300px;
+    }
+    #buscar-taller .card-todotalleres p{
+        color: rgb(160, 160, 160);
+    }
+.calificacion {
+  height: 50px;
+}
+
+.calificacion label {
+  font-size: 20px;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+label {
+  color: grey;
+}
+
+.clasificacion {
+  direction: rtl;
+  unicode-bidi: bidi-override;
+}
+
+label:hover,
+label:hover ~ label {
+  color: orange;
+}
+
+input[type="radio"]:checked ~ label {
+  color: orange;
+}
+
+.modal-dialog .clasificacion label {
+  font-size: 40px;
+  cursor: pointer;
+}
 </style>
+{% endblock %}
