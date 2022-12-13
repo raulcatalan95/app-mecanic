@@ -68,3 +68,14 @@ class listadoPrecios(models.Model):
     precio = models.CharField(max_length=25, null=False)
     rutTaller = models.ForeignKey(Talleres,on_delete=models.CASCADE)
     idServicios = models.ForeignKey(ServiciosDisponibles,null=True,blank=True,on_delete=models.CASCADE)
+
+class Login(models.Model):
+    rut = models.CharField(null=False, max_length=30)
+    fecha = models.DateField(null=False)
+    tipo = models.CharField(null=False, max_length=30,default="-")
+
+class FechaRegistro(models.Model):
+    rut = models.CharField(null=False, max_length=30)
+    fecha = models.DateField(null=False)
+    tipo = models.CharField(max_length=100,null=False,default="-")
+    accion = models.CharField(max_length=100,null=False,default="-")
