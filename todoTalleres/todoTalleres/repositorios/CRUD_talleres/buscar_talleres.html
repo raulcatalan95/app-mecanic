@@ -115,19 +115,20 @@
                         </div>
                     </div>
                     <br>
+                  
                     <h5>Evalua</h5>
                     <p class="clasificacion">
-                        <input id="radio1" type="radio" name="evaluacion"  value="5"><!--
-                        --><label for="radio1">★</label><!--
-                        --><input id="radio2" type="radio" name="evaluacion" value="4"><!--
-                        --><label for="radio2">★</label><!--
-                        --><input id="radio3" type="radio" name="evaluacion" value="3"><!--
-                        --><label for="radio3">★</label><!--
-                        --><input id="radio4" type="radio" name="evaluacion" value="2"><!--
-                        --><label for="radio4">★</label><!--
-                        --><input id="radio5" type="radio" name="evaluacion" value="1"><!--
-                        --><label for="radio5">★</label>
-                      </p>
+                      <input id="{{taller.comuna}}" type="radio" name="evaluacion"  value="5"><!--
+                      --><label for="{{taller.comuna}}">★</label><!--
+                      --><input id="{{taller.direccion}}" type="radio" name="evaluacion"  value="4"><!--
+                      --><label for="{{taller.direccion}}">★</label><!--
+                      --><input id="{{taller.correo}}" type="radio" name="evaluacion"  value="3"><!--
+                      --><label for="{{taller.correo}}">★</label><!--
+                      --><input id="{{taller.pagina}}" type="radio" name="evaluacion"  value="2"><!--
+                      --><label for="{{taller.pagina}}">★</label><!--
+                      --><input id="{{taller.telefono}}" type="radio" name="evaluacion"  value="1"><!--
+                      --><label for="{{taller.telefono}}">★</label>
+                    </p>
                  
                       <input type="submit" class="btn btn-primary" value="Enviar">
                 </form>

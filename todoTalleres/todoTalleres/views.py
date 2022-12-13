@@ -226,6 +226,7 @@ def registro_representante(request):
 
 def buscar_talleres(request):
     now = datetime.now()
+    indice = 0
     sesion = None
     try:
         sesion = request.session["sesion_activa"]
@@ -271,7 +272,7 @@ def buscar_talleres(request):
 
            comment = models.Comentarios.objects.all()
         visibilidad = "visible"
-        return render(request, 'CRUD_talleres/buscar_talleres.html',{'now':now,'mensaje':mensaje,"talleres":talleres,"visibilidad":visibilidad,'sesion_activa': sesion,'usr':usr,'comment':comment})
+        return render(request, 'CRUD_talleres/buscar_talleres.html',{'now':now,'mensaje':mensaje,"talleres":talleres,"visibilidad":visibilidad,'sesion_activa': sesion,'usr':usr,'comment':comment,'indice':indice})
     except:
         try:
             comment = None
@@ -283,10 +284,10 @@ def buscar_talleres(request):
             rutTaller = request.POST["rutTaller"]
             rutTaller=  models.Talleres.objects.get(rutTaller = rutTaller)
             models.Comentarios.objects.create(comentario = comentario,evaluacion = evaluacion, rutTaller = rutTaller, rutCliente = rutCliente, fecha=fecha)
-            return render(request, 'CRUD_talleres/buscar_talleres.html',{'now':now,'mensaje':mensaje,"visibilidad":visibilidad,'sesion_activa': sesion,'comment':comment})
+            return render(request, 'CRUD_talleres/buscar_talleres.html',{'now':now,'mensaje':mensaje,"visibilidad":visibilidad,'sesion_activa': sesion,'comment':comment,'indice':indice})
         except:
                    mensaje = ''
-                   return render(request, 'CRUD_talleres/buscar_talleres.html',{'now':now,'mensaje':mensaje,"visibilidad":visibilidad,'sesion_activa': sesion})
+                   return render(request, 'CRUD_talleres/buscar_talleres.html',{'now':now,'mensaje':mensaje,"visibilidad":visibilidad,'sesion_activa': sesion,'indice':indice})
 
 #Eliminar Cliente
 def eliminar_cliente(request):
