@@ -44,14 +44,14 @@
                   --><label for="radio55">★</label>
                 </p>
               </form>
-            <a href="#" class="col-6 d-flex justify-content-end" id="ver-comentarios" data-toggle="modal" data-target="#staticBackdrop">Ver Comentarios...</a>
+            <a href="#" class="col-6 d-flex justify-content-end" id="ver-comentarios" data-toggle="modal"  data-id="{{taller.rutTaller}}" data-target="#{{taller.rutTaller}}">Ver Comentarios...</a>
         </div>
        
         
     </div>
 </div>
   <!-- Modal -->
-  <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal fade" id="{{taller.rutTaller}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -67,7 +67,6 @@
                     {% if comentario.rutTaller == taller %}
                     <div class="row ">
                         <h4 class="ml-3">Usuario: {{comentario.rutCliente}}</h4>
-                        <h4>taller: {{comentario.rutTaller}} </h4>
                     </div>
                     <div class="container-fluid">
                         <textarea class="w-100" name="" disabled rows="5">{{comentario.comentario}}</textarea>
