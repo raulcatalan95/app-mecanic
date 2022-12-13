@@ -4,6 +4,8 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from . import forms
 from django.contrib.auth import logout
+from datetime import date
+from datetime import datetime
 
 clientes = []
 representantes = []
@@ -211,6 +213,7 @@ def registro_representante(request):
 #Buscar talleres
 
 def buscar_talleres(request):
+    now = datetime.now()
     sesion = None
     try:
         sesion = request.session["sesion_activa"]
@@ -221,6 +224,24 @@ def buscar_talleres(request):
     mensaje = None
     visibilidad = "visible"
     talleres = ""
+    usr = None
+    try:
+        usr = models.Clientes.objects.get(nick = clientes[0])
+        if (usr.clave == clientes[1]):
+         request.session['sesion_activa'] = 0
+         sesion = request.session['sesion_activa']
+        else:
+         return redirect(irInicioSesion)
+    except:
+        try:   
+            usr = models.Representantes.objects.get(correo = representantes[0])
+            if (usr.clave == representantes[1]):
+             request.session['sesion_activa'] = 1
+             sesion = request.session['sesion_activa']
+            else:
+             return redirect(irInicioSesion)
+        except:
+            return redirect(irInicioSesion)
     try:
         buscador = request.GET["buscar"]
         talleres = models.Talleres.objects.filter()
@@ -235,11 +256,25 @@ def buscar_talleres(request):
                Q(correo__contains = buscador) |
                Q(pagina__contains = buscador)).distinct()
 
+
+           comment = models.Comentarios.objects.all()
         visibilidad = "visible"
-        return render(request, 'CRUD_talleres/buscar_talleres.html',{'mensaje':mensaje,"talleres":talleres,"visibilidad":visibilidad,'sesion_activa': sesion})
+        return render(request, 'CRUD_talleres/buscar_talleres.html',{'now':now,'mensaje':mensaje,"talleres":talleres,"visibilidad":visibilidad,'sesion_activa': sesion,'usr':usr,'comment':comment})
     except:
+        try:
+            comment = None
+            comentario = request.POST["comentario"]
+            evaluacion = request.POST["evaluacion"]
+            fecha = request.POST["fecha"]
+            rutCliente = request.POST["rutCliente"]
+            rutCliente=  models.Clientes.objects.get(rutCliente = rutCliente)
+            rutTaller = request.POST["rutTaller"]
+            rutTaller=  models.Talleres.objects.get(rutTaller = rutTaller)
+            models.Comentarios.objects.create(comentario = comentario,evaluacion = evaluacion, rutTaller = rutTaller, rutCliente = rutCliente, fecha=fecha)
+            return render(request, 'CRUD_talleres/buscar_talleres.html',{'now':now,'mensaje':mensaje,"visibilidad":visibilidad,'sesion_activa': sesion,'comment':comment})
+        except:
                    mensaje = ''
-                   return render(request, 'CRUD_talleres/buscar_talleres.html',{'mensaje':mensaje,"visibilidad":visibilidad,'sesion_activa': sesion})
+                   return render(request, 'CRUD_talleres/buscar_talleres.html',{'now':now,'mensaje':mensaje,"visibilidad":visibilidad,'sesion_activa': sesion})
 
 #Eliminar Cliente
 def eliminar_cliente(request):

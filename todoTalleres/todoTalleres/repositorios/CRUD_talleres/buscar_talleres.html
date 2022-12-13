@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block body %}
+
+
 {% block navegador%}
     {% include "navegadorClientes.html"%}
 {% endblock %}
@@ -14,10 +16,10 @@
 </form>
 
 
+
 {% for taller in talleres %}
     <table class="table table-bordered table-striped" style="visibility:{{visibilidad}};">
-       <h5 class="mt-4">{{taller}}</h5> 
-       
+       <h5 class="mt-4">{{taller}}</h5>       
         <tr>
             <th scope="row">Rut Taller</th>
             <td >{{taller.rutTaller}}</td>
@@ -58,8 +60,47 @@
             <td value="">{{taller.rutRepresentante.nombre}}</td>
          
         </tr>
-        
+   
     </table>
+    <div class="row w-100">
+        {% for comentario in comment %}
+        {% if comentario.rutTaller == taller %}
+        <div class="row w-100">
+            <h4>Usuario: {{usr.nick}}</h4>
+        </div>
+        <div class="container-fluid">
+            <textarea class="w-100" name="" disabled rows="5">{{comentario.comentario}}</textarea>
+        </div>  
+        {% endif %}
+        {% endfor %}
+    </div>
+
+{{now}}
+    <form action="buscar_talleres" method="POST">
+        {% csrf_token %}
+
+     <div style="visibility: hidden;">
+        <input type="text" name="rutTaller" value="{{taller.rutTaller}}" maxlength="20" required="" id="id_rutTaller">
+        <input type="text" value="{{usr.rutCliente}}" name="rutCliente" maxlength="15" required="" id="id_rutCliente">
+     </div>
+          
+       
+        <div class="row">
+            <div class="col">
+                <label for="">Comentario</label>
+                <input class="form-control" type="text" name="comentario">
+            </div>
+            <div class="col-2">
+                <label for="">Fecha</label>
+                <input class="form-control" type="date" value="" name="fecha" id="">
+            </div>
+        </div>
+        <br>
+        <label for="">Evaluacion</label>
+        <input type="number" name="evaluacion">
+     
+          <input type="submit" value="Enviar">
+    </form>
     {% endfor %}
 {% endblock %}
 </div>
