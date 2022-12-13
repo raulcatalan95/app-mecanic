@@ -297,5 +297,4 @@ def eliminar_cliente(request):
         return render(request, 'CRUD_clientes/eliminar_cliente.html',{'mensaje':mensaje})
 
 
-    
-    
+
