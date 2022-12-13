@@ -101,6 +101,10 @@
         line-height: 70px;
     }
 }
+.btn-back{
+    font-size: 18px;
+    font-weight: 700;
+}
 </style>
 <script>
     $(document).ready(function(){
@@ -109,7 +113,7 @@
  })
 </script>
 
-    <a href="{% url 'fxInicioSesion' %}">Volver</a>
+    <a class="ml-4 btn-back" href="{% url 'fxInicioSesion' %}"> < Volver</a>
 
     <div class="registration-form">
         <form method="POST" >

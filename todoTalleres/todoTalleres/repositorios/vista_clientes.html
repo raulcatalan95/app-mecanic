@@ -6,9 +6,8 @@
         <a class="navbar-brand" href="#">
             <img class="imgSize" src='{% static "todotalleres.png" %}' alt="" class="d-inline-block align-text-top">
         </a>
-        {{cliente}}
+        <h6>Bienvenido {{cliente.nick}}!</h6>
 
-        {{sesion_activa}}
         {% if sesion_activa == 0 %}
         <div class="row">
           <form class="">
@@ -54,7 +53,11 @@
 
 
 
-
+<style>
+  button.welcome{
+    border: 2px solid rgb(0, 66, 92) !important;
+  }
+</style>
 
 
 {% endblock %}
