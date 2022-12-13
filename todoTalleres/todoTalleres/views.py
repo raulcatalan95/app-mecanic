@@ -210,6 +210,7 @@ def registro_representante(request):
     return render(request,"CRUD_talleres/registro_representante.html",{'mensaje':mensaje})  
 
 
+#aaaaa
 #Buscar talleres
 
 def buscar_talleres(request):
