@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block body %}
+{% block navegador%}
+    {% include "navegadorLogin.html"%}
+{% endblock %}
 <div class="container" id="registro-representante">
     <h3 class="mt-lg-4">Registrar Representante</h3>
 <form action="registro_representante" class="row mt-3" method="POST"> {% csrf_token %}
