@@ -19,14 +19,14 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.renderBase),
+    path('',views.renderBase,name="index"),
     path('login',views.irInicioSesion,name="login"),
     path('vista_clientes',views.vistaClientes,name="vista_cliente"),
     path('vista_talleres',views.vistaTalleres),
     path('fxInicioSesion', views.fxInicioSesion,name="fxInicioSesion"),
     path('registro_cliente',views.registro_cliente),
     path('registro_taller',views.registro_taller),
-    path('registro_representante',views.registro_representante),
+    path('registro_representante',views.registro_representante,name="registro_representante"),
     path('buscar_talleres',views.buscar_talleres,name="buscar_talleres"),
     path('eliminar_cliente',views.eliminar_cliente),
     path('editar_cliente/<str:rutCliente>/',views.editar_cliente,name='editar_cliente'),

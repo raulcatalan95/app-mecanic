@@ -1,16 +1,10 @@
 .imgSize{
-    width: 200px;
-    height: 50px;
+   
+    
 }
 
-
-.container{
-    position: relative !important;
-
-}
 
 .column{
-    margin-left: 35%;
-    margin-top: -7%;
+margin: 0px, auto;
 }
 

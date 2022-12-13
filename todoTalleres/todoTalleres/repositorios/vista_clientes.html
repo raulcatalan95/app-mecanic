@@ -1,54 +1,60 @@
 {% extends "base.html" %}
 {% block body %}
 {% load static %}
-<nav class="navbar bg-body" >
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            <img class="imgSize" src='{% static "todotalleres.png" %}' alt="" class="d-inline-block align-text-top">
-        </a>
-        <h6>Bienvenido {{cliente.nick}}!</h6>
 
-        {% if sesion_activa == 0 %}
-        <div class="row">
-          <form class="">
-              <div class="row p-3">
-                  <div class="col-7">
-                 <a class="btn btn-primary"  type="submit" href="{% url 'editar_cliente' cliente.rutCliente %}" >Editar cuenta</a>
-                  </div>
-                  <div class="col-5">
-                    <a class="btn btn-primary"  type="submit" href="{% url 'login' %}" >Cerrar sesion</a>
-                  </div>
-              </div> 
-           </form>
-      </div>
-        {% else %}
-        <div class="row">
-          <form class="">
-              <div class="row p-3">
-                  <div class="col-7">
-                      <a href="login" type="submit">Iniciar sesion</a> 
-                  </div>
-                  <div class="col-5">
-                      <a href="login" type="submit">Registro</a>
-                  </div>
-              </div> 
-           </form>
-      </div>
-        {% endif %}
-    </div>
-</nav>
+<nav class="navbar navbar-expand-lg">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 
-<div class="container">
-    <div class="row w-50 m-auto">
-        <img class="imgSize2" src='{% static "todotalleres2.png" %}'>
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="40" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
+          <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z"/>
+        </svg>
+ 
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="navbar-brand" href="{% url 'fxInicioSesion' %}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="40" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
+              <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z"/>
+            </svg>
+           </a>
+        </li>
+      </ul> 
+
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active marginLI">
+          <a class="nav-link" href="{% url 'editar_cliente' cliente.rutCliente %}">Editar cuenta</a>
+        </li>
+        <li class="nav-item active marginLI2">
+          <a class="nav-link" href="{% url 'login' %}">Cerrar sesion</a>
+          </li>
+      </ul>
+         
+       
+    </nav>
+
+
+<div class="container mt-5">
+    <div class="row w-100 m-auto">
+        <img class="w-50 m-auto" width="600" height="300" src='{% static "todotalleres2.png" %}'>
     </div>
 </div>
-<div class="column">
-    <form action="buscar_talleres" method="GET" class="w-100"> {% csrf_token %}
-        <div class="col-12 col-lg-6 d-flex">
-        <input type="text" class="form-control mr-lg-2" name="buscar">
-        <input type="submit" class="btn btn-primary" value="Buscar">
+<br>
+<br>
+
+
+<div class="container">
+    <div class="row m-auto">
+        <form action="buscar_talleres" method="GET" class="w-75 m-auto"> {% csrf_token %}
+            
+            <div class="text-center">
+                <input type="text" class="form-control mr-lg-2 p-3" name="buscar">
+                <input type="submit" class="btn btn-primary btn-xs w-25 mt-5" value="Buscar"> 
+            </div>
+        </form>
     </div>
+  
+</div>
 </div>
 
 
@@ -57,6 +63,18 @@
   button.welcome{
     border: 2px solid rgb(0, 66, 92) !important;
   }
+
+  body{
+      font-family: 'Open Sans', sans-serif;
+      background-color:#034078;
+    }
+     nav{ 
+    font-size: 18px;
+    background: #023047;
+    }
+    a{
+      color: #FEFCFB;
+    }
 </style>
 
 
