@@ -73,5 +73,7 @@ class Clasificacion(models.Model):
     promedio = models.FloatField(null=False,default=0)
 
 class FechaRegistro(models.Model):
-    rut = models.CharField(primary_key=True,max_length=20)
+    rut = models.CharField(primary_key=True,max_length=30)
     fecha = models.DateField(null=False)
+    tipo = models.CharField(max_length=100,null=False,default="-")
+    # acion = models.CharField(max_length=100,null=False,default="-")

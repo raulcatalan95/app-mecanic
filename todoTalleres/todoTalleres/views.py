@@ -141,7 +141,7 @@ def registro_cliente(request):
 
         models.Clientes.objects.create(rutCliente = rutCliente,correo=correo, fechaNacimiento=fechaNacimiento, nick=nick, clave=clave, tipoVehiculo=tipoVehiculo, patente=patente,
         modelo=modelo,marca=marca,anno=anno)
-        models.FechaRegistro.objects.create(rut = rutCliente,fecha = date.today())
+        models.FechaRegistro.objects.create(rut = rutCliente,fecha = date.today(),tipo = "Cliente" )
 
         mensaje = f"Se ha regitrado el Cliente {rutCliente}"
     except Exception as ex:
@@ -170,7 +170,7 @@ def registro_taller(request):
 
         models.Talleres.objects.create(rutTaller = rutTaller,razonSocial=razonSocial, comuna=comuna, direccion=direccion, telefono=telefono, correo=correo, pagina=pagina,
         rutRepresentante=rutModel)
-        models.FechaRegistro.objects.create(rut = rutTaller,fecha = date.today())
+        models.FechaRegistro.objects.create(rut = rutTaller,fecha = date.today(),tipo = "Taller" )
 
         mensaje = f"Taller creado: {rutModel}"
         return render(request,"CRUD_talleres/registro_taller.html",{'mensaje':mensaje})  
@@ -196,7 +196,7 @@ def registro_representante(request):
         telefono = request.POST['telefono']
         fechaNacimiento = request.POST['fechaNacimiento']
         models.Representantes.objects.create(rutRepresentante = rutRepresentante,nombre=nombre, correo=correo, clave=clave, telefono=telefono, fechaNacimiento=fechaNacimiento)
-        models.FechaRegistro.objects.create(rut = rutRepresentante,fecha = date.today())
+        models.FechaRegistro.objects.create(rut = rutRepresentante,fecha = date.today(),tipo = "Representante" )
 
         mensaje = f"Se ha regitrado el Cliente {rutRepresentante}"
     except Exception as ex:
@@ -269,14 +269,18 @@ def irAgregarComentario(request):
 def fxAgregarComentario(request):
     msj = None
 
-    _id = request.GET['id'] 
+    #_id = request.GET['id'] 
     _comentario = request.GET['comentario']
     _evaluacion = request.GET['evaluacion']
     _rutTaller = request.GET['rutTaller']
     _rutCliente = request.GET['rutCliente']
     
     try:
-        models.Comentarios.objects.create(id = _id , comentario = _comentario, evaluacion = _evaluacion , rutTaller = _rutTaller , rutCliente = _rutCliente , fecha = date.today())
+        models.Comentarios.objects.create(
+            #id = _id, 
+            comentario = _comentario, 
+            evaluacion = _evaluacion, rutTaller = _rutTaller,
+            rutCliente = _rutCliente, fecha = date.today())
         msj = 'comentario registrado'
     except Error as err:
         msj = f'\n Ha ocurrido un error en la operacion {err}'
