@@ -66,7 +66,7 @@
         {% for comentario in comment %}
         {% if comentario.rutTaller == taller %}
         <div class="row w-100">
-            <h4>Usuario: {{usr.nick}}</h4>
+            <h4>Usuario: {{comentario.rutCliente.nick}}</h4>
         </div>
         <div class="container-fluid">
             <textarea class="w-100" name="" disabled rows="5">{{comentario.comentario}}</textarea>
