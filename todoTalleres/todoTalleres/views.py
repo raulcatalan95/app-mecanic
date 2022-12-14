@@ -113,7 +113,8 @@ def editar_cliente(request,rutCliente):
         return redirect("sesion/login.html")
 
     if sesion == 0:
-        atencion = models.Clientes.objects.get(rutCliente=rutCliente)
+        atencion =  models.Clientes.objects.get(nick = clientes[0])
+      #  atencion = models.Clientes.objects.get(rutCliente=rutCliente)
         form = forms.clienteForm(request.POST or None, request.FILES or None, instance=atencion)
         if form.is_valid() and request.POST:
             form.save()
@@ -130,7 +131,10 @@ def editar_taller(request,rutRepresentante):
     except:
         return render(request, "sesion/login.html")
     if sesion==1:
-        atencion = models.Talleres.objects.get(rutRepresentante=rutRepresentante)
+        #atencion = models.Talleres.objects.get(rutRepresentante=rutRepresentante)
+        repre =  models.Representantes.objects.get(correo = representantes[0])
+        atencion = models.Talleres.objects.get(rutRepresentante = repre.rutRepresentante)
+       
         form = forms.tallerForm(request.POST or None, request.FILES or None, instance=atencion)
         if form.is_valid() and request.POST:
            form.save()
@@ -157,7 +161,7 @@ def registro_cliente(request):
         models.Clientes.objects.create(rutCliente = rutCliente,correo=correo, fechaNacimiento=fechaNacimiento, nick=nick, clave=clave, tipoVehiculo=tipoVehiculo, patente=patente,
         modelo=modelo,marca=marca,anno=anno)
         models.FechaRegistro.objects.create(rut = rutCliente,fecha = date.today(),tipo = "Cliente" ,accion = "Create" )
-        mensaje = f"Se ha regitrado el Cliente {rutCliente}"
+        mensaje = f""
 
     except Exception as ex:
         if str(ex.__cause__).find('todoTalleres_clientes.rutCliente') > 0:
@@ -210,11 +214,10 @@ def registro_representante(request):
         clave = request.POST['clave']
         telefono = request.POST['telefono']
         fechaNacimiento = request.POST['fechaNacimiento']
-
         models.Representantes.objects.create(rutRepresentante = rutRepresentante,nombre=nombre, correo=correo, clave=clave, telefono=telefono, fechaNacimiento=fechaNacimiento)
+        usr = models.Representantes.objects.get(rutRepresentante = rutRepresentante)
         models.FechaRegistro.objects.create(rut = rutRepresentante,fecha = date.today(),tipo = "Representante" ,accion = "Create" )
-
-        mensaje = f"Se ha regitrado el Cliente {rutRepresentante}"
+        return render(request,'CRUD_talleres/registro_taller.html',{'usr':usr})
     except Exception as ex:
         if str(ex.__cause__).find('todoTalleres_representantes.rutRepresentante') > 0:
             mensaje = 'Ya existe un registro con ese rut'

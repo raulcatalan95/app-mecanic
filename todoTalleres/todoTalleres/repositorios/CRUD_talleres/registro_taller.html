@@ -5,6 +5,8 @@
     {% include "navegadorLogin.html"%}
 {% endblock %}
 
+{% if usr %}
+
 <form action="registro_taller" class="container mt-3" method="POST"> {% csrf_token %}
     <table>
         <tr>
@@ -52,14 +54,20 @@
         <tr>
             <th>Rut representante</th>
         </tr>
-        <tr>
-            <th><input type="text" name="rutRepresentante"></th>
-        </tr>
+        <select name="rutRepresentante" id="id_rutRepresentante">
+            <option value="{{usr.rutRepresentante}}" selected="">{{usr.rutRepresentante}}</option>
+
+          
+          </select>
     </table>
     <div class="mt-3">
         <input type="submit">
     </div>
     {{mensaje}}
 </form>
+{% else %}
+
+{% endif %}
+
 
 {% endblock %}
