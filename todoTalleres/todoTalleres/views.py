@@ -63,6 +63,8 @@ def fxInicioSesion(request):
         usr = None
         try:
             usr = models.Representantes.objects.get(correo = request.POST["form_username"])
+            taller = models.Talleres.objects.get(rutRepresentante = usr.rutRepresentante)
+            comment = models.Comentarios.objects.all()
             if (usr.clave == request.POST["form_password"]):
                 request.session['sesion_activa'] = 1
                 sesion = request.session['sesion_activa']
@@ -71,7 +73,7 @@ def fxInicioSesion(request):
                 #
                 models.Login.objects.create(rut = usr.rutRepresentante,fecha = date.today(),tipo = "Representante")
                 #
-                return render(request,"vista_talleres.html",{"taller":usr,"sesion_activa":sesion})
+                return render(request,"vista_talleres.html",{"taller":taller,"sesion_activa":sesion, "comment":comment})
             else:
                 return redirect(irInicioSesion)
         except:
@@ -88,13 +90,15 @@ def fxInicioSesion(request):
                 usr = None
                 try:
                     usr = models.Representantes.objects.get(correo = representantes[0])
+                    taller = models.Talleres.objects.get(rutRepresentante = usr.rutRepresentante)
+                    comment = models.Comentarios.objects.all()
                     if (usr.clave == representantes[1]):
                      request.session['sesion_activa'] = 1
                      sesion = request.session['sesion_activa']
                     #
                      models.Login.objects.create(rut = usr.rutRepresentante,fecha = date.today(),tipo = "Representante")
                     #
-                     return render(request,"vista_talleres.html",{"taller":usr,"sesion_activa":sesion})
+                     return render(request,"vista_talleres.html",{"taller":taller,"sesion_activa":sesion,"comment":comment})
                     else:
                      return redirect(irInicioSesion)
                 except:
